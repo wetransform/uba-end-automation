@@ -1,0 +1,41 @@
+{
+  "targetEPSG": ["3035"],
+  "additionalEPSG": [],
+  "transformations": {
+    "majorroad": {
+      "project": "majorroad/DF4_8_majorroads_xls+shp-to-geopackage.halez",
+      "sourceFolders": [
+        "majorroad/input"
+      ],
+      "targetFolder": "majorroad/output",
+      "targetFileName": "majorroad.gpkg"
+    },
+    "majorair": {
+      "project": "majorair/DF4_8_majorairports_xls-to-geopackage-template.halez",
+      "sourceFolders": [
+        "majorair/input"
+      ],
+      "targetFolder": "majorair/output",
+      "targetFileName": "majorair.gpkg"
+    },
+    "majorrail": {
+      "project": "majorrail/DF4_8_majorrailways_xls+shp-to-geopackage.halez",
+      "sourceFolders": [
+        "majorrail/input"
+      ],
+      "targetFolder": "majorrail/output",
+      "targetFileName": "majorrail.gpkg"
+    },
+    "agg": {
+      "project": "agg/DF4_8_agglomerations_xls+shp-to-geopackage.halez",
+      "sourceFolders": [
+        "agg/input/aggroad",
+        "agg/input/aggrail",
+        "agg/input/aggair",
+        "agg/input/aggind"
+      ],
+      "targetFolder": "agg/output",
+      "targetFileName": "agg.gpkg"
+    }
+  }  
+}

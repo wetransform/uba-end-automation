@@ -1,0 +1,7 @@
+/.gradle/
+gradle.properties
+/build/
+/*.zip
+*.rej
+/result/
+pathing.jar

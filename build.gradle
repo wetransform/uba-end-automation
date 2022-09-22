@@ -1,0 +1,105 @@
+buildscript {
+  repositories {
+    mavenLocal()
+    maven {
+      url 'https://artifactory.wetransform.to/artifactory/libs-release-local'
+    }
+    maven {
+      url 'https://artifactory.wetransform.to/artifactory/libs-snapshot-local'
+    }
+  }
+  dependencies {
+    classpath 'to.wetransform.hale:gradle-hale-plugin:1.2.0-SNAPSHOT'
+  }
+}
+
+apply plugin: 'to.wetransform.hale'
+
+hale {
+  cliVersion = '4.2.0-SNAPSHOT'
+}
+
+/*
+ * Configuration file
+ */
+
+project.ext.configBasePath = project.file(project.hasProperty('configBasePath') ? project.getProperty('configBasePath') : '.')
+def json = new groovy.json.JsonSlurper()
+def config = json.parse(file(project.hasProperty('configFile') ? project.getProperty('configFile') : 'config.json'))
+
+/*
+ * Transformation tasks
+ */
+
+task('transform-all') {
+  description 'Führt alle Transformationen durch'
+  group 'Transformation'
+}
+
+config.targetEPSG.each { epsg ->
+  config.transformations.each { name, settings ->
+
+    def projectFile = new File(configBasePath, settings.project)
+
+    // target
+    String targetName = "$name-$epsg"
+    File targetFolder = settings.targetFolder ? project.file(settings.targetFolder) : new File('result', targetName)
+
+    task("transform-$name-$epsg", type: hale.transform()) {
+      assert projectFile != null
+      transformation = projectFile
+
+      settings.sourceFolders.each { sourceFolder ->
+        source(new File(configBasePath, sourceFolder)) {
+          provider 'eu.esdihumboldt.hale.io.shape.reader.instance'
+          include '*.shp'
+          setting 'contentType', 'eu.esdihumboldt.hale.io.shp'
+          //setting 'defaultSrs', 'code:EPSG:2056'
+        }
+      }
+
+      if (settings.sourceFilter) {
+        filterArgs << '-filter'
+        filterArgs << settings.sourceFilter
+      }
+
+      logFolder = targetFolder
+
+      target(new File(targetFolder, settings.targetFileName ?: 'output.gpkg')) {
+        provider 'eu.esdihumboldt.hale.io.geopackage.instance.writer'
+
+        setting 'crs', "code:EPSG:$epsg"
+      }
+
+      // XML schema validation
+      // validate('eu.esdihumboldt.hale.io.xml.validator')
+
+      printStacktrace = true
+      trustGroovy = true
+
+      // ignore failure -> task will be successful
+      ignoreExitValue = true
+
+      description "Runs a transformation based on the project ${projectFile.name}."
+      group 'Transformation'
+    }
+
+    tasks["transform-$name-$epsg"].doFirst {
+      targetFolder.mkdirs()
+    }
+    
+    tasks['transform-all'].dependsOn("transform-$name-$epsg")
+  }
+}
+
+
+configurations.all {
+  resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+/*
+ * Gradle wrapper
+ */
+wrapper {
+  gradleVersion = '6.9.2'
+}
