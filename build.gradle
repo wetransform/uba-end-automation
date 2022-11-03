@@ -43,7 +43,7 @@ config.targetEPSG.each { epsg ->
 
     // target
     String targetName = "$name-$epsg"
-    File targetFolder = settings.targetFolder ? project.file(settings.targetFolder) : new File('result', targetName)
+    File targetFolder = settings.targetFolder ? new File(configBasePath, settings.targetFolder) : new File('result', targetName)
 
     task("transform-$name-$epsg", type: hale.transform()) {
       assert projectFile != null
