@@ -49,12 +49,22 @@ config.targetEPSG.each { epsg ->
       assert projectFile != null
       transformation = projectFile
 
-      settings.sourceFolders.each { sourceFolder ->
-        source(new File(configBasePath, sourceFolder)) {
+      settings.shapefiles.each { shapefile ->
+        source(new File(configBasePath, shapefile.path)) {
           provider 'eu.esdihumboldt.hale.io.shape.reader.instance'
-          include '*.shp'
+          include "${shapefile.filename}"
           setting 'contentType', 'eu.esdihumboldt.hale.io.shp'
-          //setting 'defaultSrs', 'code:EPSG:2056'
+          setting 'typename', "${shapefile.typename}"
+        }
+      }
+
+      settings.table.sheets.each { sheet ->
+        source(new File(configBasePath, settings.table.path)) {
+          provider 'eu.esdihumboldt.hale.io.xls.reader.instance'
+          setting 'contentType', 'eu.esdihumboldt.hale.io.xls.xlsx'
+          setting 'typename', "${sheet.typename}"
+          setting 'sheetIndex', "${sheet.index}"
+          setting 'skip', '2'
         }
       }
 

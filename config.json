@@ -4,36 +4,167 @@
   "transformations": {
     "majorroad": {
       "project": "majorroad/DF4_8_majorroads_xls+shp-to-geopackage.halez",
-      "sourceFolders": [
-        "majorroad/input"
+      "shapefiles": [
+        {
+          "path": "majorroad/input",
+          "filename": "lden.shp",
+          "typename": "NoiseContours_Lden"
+        },
+        {
+          "path": "majorroad/input",
+          "filename": "lnight.shp",
+          "typename": "NoiseContours_Lnight"
+        }
       ],
+      "table": {
+        "path": "majorroad/input/table.xlsx",
+        "sheets": [
+          {
+            "index": "0",
+            "typename": "DF4_8_StraßenverkehrAllgemein"
+          },
+          {
+            "index": "1",
+            "typename": "DF4_8_StraßenverkehrMenschen"
+          },
+          {
+            "index": "2",
+            "typename": "DF4_8_StraßenverkehrSonstige"
+          }
+        ]
+      },
       "targetFolder": "majorroad/output",
       "targetFileName": "majorroad.gpkg"
     },
     "majorair": {
       "project": "majorair/DF4_8_majorairports_xls-to-geopackage-template.halez",
-      "sourceFolders": [
-        "majorair/input"
+      "shapefiles": [
+        {
+          "path": "majorair/input",
+          "filename": "lden.shp",
+          "typename": "NoiseContours_Lden"
+        },
+        {
+          "path": "majorair/input",
+          "filename": "lnight.shp",
+          "typename": "NoiseContours_Lnight"
+        }
       ],
+      "table": {
+        "path": "majorair/input/table.xlsx",
+        "sheets": [
+          {
+            "index": "0",
+            "typename": "DF4_8_GroßflughafenAllgemein"
+          },
+          {
+            "index": "1",
+            "typename": "DF4_8_GroßflughafenMenschen"
+          },
+          {
+            "index": "2",
+            "typename": "DF4_8_GroßflughafenSonstige"
+          }
+        ]
+      },
       "targetFolder": "majorair/output",
       "targetFileName": "majorair.gpkg"
     },
     "majorrail": {
       "project": "majorrail/DF4_8_majorrailways_xls+shp-to-geopackage.halez",
-      "sourceFolders": [
-        "majorrail/input"
+      "shapefiles": [
+        {
+          "path": "majorrail/input",
+          "filename": "lden.shp",
+          "typename": "NoiseContours_Lden"
+        },
+        {
+          "path": "majorrail/input",
+          "filename": "lnight.shp",
+          "typename": "NoiseContours_Lnight"
+        }
       ],
+      "table": {
+        "path": "majorrail/input/table.xlsx",
+        "sheets": [
+          {
+            "index": "0",
+            "typename": "DF4_8_SchienenverkehrAllgemein"
+          },
+          {
+            "index": "1",
+            "typename": "DF4_8_SchienenverkehrMenschen"
+          },
+          {
+            "index": "2",
+            "typename": "DF4_8_SchienenverkehrSonstige"
+          }
+        ]
+      },
       "targetFolder": "majorrail/output",
       "targetFileName": "majorrail.gpkg"
     },
     "agg": {
       "project": "agg/DF4_8_agglomerations_xls+shp-to-geopackage.halez",
-      "sourceFolders": [
-        "agg/input/aggroad",
-        "agg/input/aggrail",
-        "agg/input/aggair",
-        "agg/input/aggind"
+      "shapefiles": [
+        {
+          "path": "agg/input/aggroad",
+          "filename": "lden.shp",
+          "typename": "NoiseContours_roadsInAgglomeration_Lden"
+        },
+        {
+          "path": "agg/input/aggroad",
+          "filename": "lnight.shp",
+          "typename": "NoiseContours_roadsInAgglomeration_Lnight"
+        },
+        {
+          "path": "agg/input/aggrail",
+          "filename": "lden.shp",
+          "typename": "NoiseContours_railwaysInAgglomeration_Lden"
+        },
+        {
+          "path": "agg/input/aggrail",
+          "filename": "lnight.shp",
+          "typename": "NoiseContours_railwaysInAgglomeration_Lnight"
+        },
+        {
+          "path": "agg/input/aggair",
+          "filename": "lden.shp",
+          "typename": "NoiseContours_airportsInAgglomeration_Lden"
+        },
+        {
+          "path": "agg/input/aggair",
+          "filename": "lnight.shp",
+          "typename": "NoiseContours_airportsInAgglomeration_Lnight"
+        },
+        {
+          "path": "agg/input/aggind",
+          "filename": "lden.shp",
+          "typename": "NoiseContours_industryInAgglomeration_Lden"
+        },
+        {
+          "path": "agg/input/aggind",
+          "filename": "lnight.shp",
+          "typename": "NoiseContours_industryInAgglomeration_Lnight"
+        }
       ],
+      "table": {
+        "path": "agg/input/table.xlsx",
+        "sheets": [
+          {
+            "index": "0",
+            "typename": "DF4_8_AgglomerationAllgemein"
+          },
+          {
+            "index": "1",
+            "typename": "DF4_8_AgglomerationLärmquellen"
+          },
+          {
+            "index": "2",
+            "typename": "DF4_8_AgglomerationMenschen"
+          }
+        ]
+      },
       "targetFolder": "agg/output",
       "targetFileName": "agg.gpkg"
     }
