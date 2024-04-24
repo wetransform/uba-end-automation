@@ -115,5 +115,5 @@ configurations.all {
  * Gradle wrapper
  */
 wrapper {
-  gradleVersion = '6.9.2'
+  gradleVersion = '8.7'
 }
