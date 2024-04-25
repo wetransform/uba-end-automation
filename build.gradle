@@ -9,15 +9,15 @@ buildscript {
     }
   }
   dependencies {
-    classpath 'to.wetransform.hale:gradle-hale-plugin:1.2.0-SNAPSHOT'
-    classpath 'commons-io:commons-io:2.11.0'
+    classpath 'to.wetransform.hale:gradle-hale-plugin:2.0.0'
+    classpath 'commons-io:commons-io:2.16.1'
   }
 }
 
 apply plugin: 'to.wetransform.hale'
 
 hale {
-  cliVersion = '4.2.0-SNAPSHOT'
+  cliVersion = '5.1.0'
 }
 
 import org.apache.commons.io.FileUtils
@@ -37,6 +37,47 @@ def config = json.parse(file(project.hasProperty('configFile') ? project.getProp
 task('transform-all') {
   description 'Führt alle Transformationen durch'
   group 'Transformation'
+}
+
+config.validations.each { name, settings ->
+    def projectFile = new File(configBasePath, settings.project)
+
+    String targetName = "$name"
+    File targetFolder = settings.targetFolder ? new File(configBasePath, settings.targetFolder) : new File('result', targetName)
+
+    task("validate-$name", type: hale.transform()) {
+      assert projectFile != null
+      transformation = projectFile
+
+      logFolder = targetFolder
+
+      source(new File(configBasePath, settings.table.path)) {
+        provider 'eu.esdihumboldt.hale.io.xls.reader.instance'
+        setting 'contentType', 'eu.esdihumboldt.hale.io.xls.xlsx'
+        setting 'skip', '0'
+        setting 'multiSheet', 'true'
+        setting 'dateTimeFormatterDefault', '[dd.MM.yyyy]'
+      }
+
+      target(new File(targetFolder, settings.targetFileName ?: 'output.gpkg')) {
+        provider 'eu.esdihumboldt.hale.io.xls.writer.instance'
+
+        //setting 'crs', "code:EPSG:$epsg"
+        setting 'selectedExportType', 'NoiseActionPlanMajorRoad,NAP_MajorRoad,NAP_MajorRoadCompetentAuthority,NAP_MajorRoadLimitValues,NAP_RoadMappingResultDetail,NAP_RoadReductionMeasure,NAP_RoadReductionHealthImpact_1,NAP_RoadReductionHealthImpact_2,NAP_RoadReductionHealthImpact_3,DatasetDefaultProperties,CodelistProperties'
+      }
+
+      printStacktrace = true
+      trustGroovy = true
+
+      description "Validate input data based on the project ${projectFile.name}."
+      group 'Transformation'
+    }
+
+    tasks["validate-$name"].doFirst {
+      targetFolder.mkdirs()
+      FileUtils.cleanDirectory(targetFolder)
+    }
+
 }
 
 config.targetEPSG.each { epsg ->

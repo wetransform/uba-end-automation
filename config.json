@@ -1,6 +1,16 @@
 {
   "targetEPSG": ["3035"],
   "additionalEPSG": [],
+  "validations": {
+    "nap-majorroad": {
+      "project": "majorroad/DF7_10_majorroads_validate_haleplatform.halez",
+      "table": {
+        "path": "majorroad/input/LAP_HVS_2024_v230717.xlsx"
+      },
+      "targetFolder": "majorroad/output",
+      "targetFileName": "LAP_HVS_2024_v230717_validation.xlsx"
+    }
+  },
   "transformations": {
     "majorroad": {
       "project": "majorroad/DF4_8_majorroads_xls+shp-to-geopackage.halez",
