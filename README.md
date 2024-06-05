@@ -85,3 +85,88 @@ Mit dem Befehl `gradlew transform-all` können alle in `config.json` konfigurier
 
 Die Transformationen können über `gradlew transform-<name>-<EPSG>` auch einzeln ausgeführt (z.B. `gradlew transform-agg-3035`).
 Eine Liste aller verfügbaren Transformationen kann mit `gradlew tasks` abgerufen werden.
+
+## Datenfluss 7_10
+
+### Ordnerstruktur
+
+Für den Datenfluss 7_10 wird in der Standardkonfiguration folgende Ordnerstruktur unterhalb von `configBasePath` erwartet:
+
+    <configBasePath>/
+    ├─ majorroad/
+    │  ├─ UBA-DE_HVS_to_END_DF7_10_Roads.halez
+    │  ├─ DF7_10_Roads_Aggregations.halez
+    │  ├─ input/
+    |  │  ├─ <Plan_1>/
+    |  |  |  ├─ <Plandatei_UBA>.xlsx
+    |  │  ├─ <Plan_2>/
+    |  │  ├─ ...
+    |  │  ├─ <Plan_n>/
+    │  ├─ output/
+    │  ├─ validation/
+
+### Validierung
+
+In einem ersten Schritt müssen die Excel-Vorlagen validiert und in das von der EEA vorgegebene Format überführt werden.
+Mit dem Befehl `gradlew validate-all` können alle in der Datei `config.json` konfigurierten Validierungen ausgeführt werden.
+
+Die Validierungen können über `gradlew validate-nap-<quelle>-<plan>` auch einzeln ausgeführt werden.
+Eine Liste aller verfügbaren Validierungen kann mit `gradlew tasks` abgerufen werden.
+
+Bei jedem Validierungslauf wird eine Liste der durchgeführten Validierungen in der Datei `Zusammenfassung.log`
+angehängt, die das Ergebnis für jede validierte Eingabedatei zeigt.
+
+Die detaillierten Log-Ausgaben und Berichte werden im jeweiligen Ausgabeverzeichnis des validierten Plans
+(z. B. `<configBasePath>/majorroad/validation/Plan_1`) abgelegt. Folgende Dateien werden erzeugt:
+
+- `DF7_10_NAP_<Quelle>_<Plan>.xlsx` - Ins EEA-Format überführter Plan
+- `out.log` - Standardausgabe (stdout)
+- `err.log` - Standardfehlerausgabe (stderr)
+- `reports.out` - hale-Berichtsdatei
+- `statistics.json` - Statistikdatei im JSON-Format
+
+## Aggregation
+
+Alle ins EEA-Format überführten Excel-Vorlagen können dann in einem zweiten Schritt aggregiert werden. Mit dem Befehl
+`gradlew aggregate-all` können alle in der Datei `config.json` konfigurierten Aggregationen ausgeführt werden.
+
+Die Aggregation umfasst auch solche Pläne, bei denen Validierungsfehler aufgetreten sind, d. h. die Ausgabedatei der
+Aggregation wird ebenfalls Validierungsfehler aufweisen. Um Pläne mit Validierungsfehlern von der Aggregation auszunehmen,
+muss das entsprechende Planverzeichnis aus dem Validierungsordner (z. B. `<configBasePath>/majorroad/validation`) entfernt
+oder von dort verschoben werden.
+
+Die Aggregationen können über `gradlew aggregate-nap-<quelle>` auch einzeln ausgeführt werden.
+Eine Liste aller verfügbaren Aggregationen kann mit `gradlew tasks` abgerufen werden.
+
+Die detaillierten Log-Ausgaben und Berichte werden im Ausgabeverzeichnis der Quelle
+(z. B. `<configBasePath>/majorroad/output`) abgelegt. Folgende Dateien werden erzeugt:
+
+- `<Vorlagenname>_aggregated.xlsx` - Aggregierte Daten
+- `out.log` - Standardausgabe (stdout)
+- `err.log` - Standardfehlerausgabe (stderr)
+- `reports.out` - hale-Berichtsdatei
+- `statistics.json` - Statistikdatei im JSON-Format
+
+## Bekannte Probleme
+
+Bei der Ausführung der Gradle-Aufgaben kann es vermehrt zu den u. a. oder ähnlichen Konsolenausgaben kommen. Die Meldungen
+haben  keinen Einfluss auf die Ergebnisse der Transformation, Validierung oder Aggregation und können ignoriert werden.
+
+```
+INFO e.e.h.c.h.i.ProjectTransformationEnvironment(124) - No advisor for action eu.esdihumboldt.hale.lookup.import given, using advisor registered through extension point.
+```
+
+```
+ERROR c.o.o.c.s.f.OMMapBufferEntry(47) - Error on calling Sun's MMap buffer clean
+java.lang.IllegalAccessException: class com.orientechnologies.orient.core.storage.fs.OMMapBufferEntry cannot access interface sun.nio.ch.DirectBuffer (in module java.base) because module java.base does not export sun.nio.ch to unnamed module @3f191845
+        at java.base/jdk.internal.reflect.Reflection.newIllegalAccessException(Reflection.java:392)
+        at java.base/java.lang.reflect.AccessibleObject.checkAccess(AccessibleObject.java:674)
+        at java.base/java.lang.reflect.Method.invoke(Method.java:560)
+        at com.orientechnologies.orient.core.storage.fs.OMMapBufferEntry.close(OMMapBufferEntry.java:128)
+        at com.orientechnologies.orient.core.storage.fs.OMMapManagerNew.closeEntry(OMMapManagerNew.java:451)
+        at com.orientechnologies.orient.core.storage.fs.OMMapManagerNew.removeEntry(OMMapManagerNew.java:482)
+        at com.orientechnologies.orient.core.storage.fs.OMMapManagerNew.flush(OMMapManagerNew.java:190)
+        at com.orientechnologies.orient.core.storage.impl.local.OStorageLocal.close(OStorageLocal.java:360)
+        at com.orientechnologies.orient.core.storage.impl.local.OStorageLocal.delete(OStorageLocal.java:392)
+        at com.orientechnologies.orient.core.db.raw.ODatabaseRaw.drop(ODatabaseRaw.java:166)
+```
