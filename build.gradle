@@ -26,6 +26,8 @@ import org.apache.commons.io.FileUtils
  * Configuration file
  */
 
+gradle.startParameter.continueOnFailure = true
+
 project.ext.configBasePath = project.file(project.hasProperty('configBasePath') ? project.getProperty('configBasePath') : '.')
 def json = new groovy.json.JsonSlurper()
 def config = json.parse(file(project.hasProperty('configFile') ? project.getProperty('configFile') : 'config.json'))
@@ -37,6 +39,147 @@ def config = json.parse(file(project.hasProperty('configFile') ? project.getProp
 task('transform-all') {
   description 'Führt alle Transformationen durch'
   group 'Transformation'
+}
+
+task('validate-all') {
+  description 'Führt alle Validierungen durch'
+  group 'Validierung'
+}
+
+task('aggregate-all') {
+  description 'Führt alle Aggregationen durch'
+  group 'Aggregation'
+}
+
+task('prepare-validation-summary').doFirst {
+  def summaryFile = file('Zusammenfassung.log')
+  summaryFile.withWriterAppend('utf8') { out ->
+    out.append('\n')
+    out.append('==================================================\n')
+    out.append("Validierungslauf ${new Date().toString()}\n")
+    out.append('==================================================\n')
+  }
+}
+
+config.validations.each { name, settings ->
+    def projectFile = new File(configBasePath, settings.project)
+
+    String targetName = "$name"
+    File targetFolder = settings.targetFolder ? new File(configBasePath, settings.targetFolder) : new File('result', targetName)
+
+    // File outputFolder = new File(targetFolder, 'results')
+
+    def inputFolder = new File(configBasePath, settings.table.path)
+    inputFolder.eachDir { d ->
+
+      File logFileFolder = new File(targetFolder, d.name)
+      logFileFolder.mkdirs()
+
+      task("validate-$name-${d.name}", type: hale.transform()) {
+        assert projectFile != null
+        transformation = projectFile
+
+        logToConsole = false
+        logFolder = logFileFolder
+
+        source(d) {
+          include '*.xlsx'
+          provider 'eu.esdihumboldt.hale.io.xls.reader.instance'
+          setting 'contentType', 'eu.esdihumboldt.hale.io.xls.xlsx'
+          setting 'skip', '0'
+          setting 'multiSheet', 'true'
+          setting 'dateTimeFormatterDefault', '[dd.MM.yyyy]'
+        }
+
+        target(new File(logFileFolder, settings.targetFileName ?: 'output.xlsx')) {
+          provider 'eu.esdihumboldt.hale.io.xls.writer.instance'
+          setting 'selectedExportType', 'NoiseActionPlanMajorRoad,NAP_MajorRoad,NAP_MajorRoadCompetentAuthority,NAP_MajorRoadLimitValues,NAP_RoadMappingResultDetail,NAP_RoadReductionMeasure,NAP_RoadReductionHealthImpact_1,NAP_RoadReductionHealthImpact_2,NAP_RoadReductionHealthImpact_3,ESTATUnitReference,DatasetDefaultProperties,CodelistProperties'
+        }
+
+        printStacktrace = true
+        trustGroovy = true
+        ignoreExitValue = false
+
+        additionalArgs << '-statisticsOut'
+        additionalArgs << "${logFileFolder}/statistics.json"
+        additionalArgs << '-reportsOut'
+        additionalArgs << "${logFileFolder}/reports.out"
+        additionalArgs << '-successEvaluation'
+        additionalArgs << 'successEvaluation.groovy'
+
+        description "Eingabedaten auf Basis des hale»studio-Projekts \"${projectFile.name}\" validieren."
+        group 'Validierung'
+
+        dependsOn 'prepare-validation-summary'
+        finalizedBy "finalize-$name-${d.name}"
+      }
+
+      tasks["validate-$name-${d.name}"].doFirst {
+        targetFolder.mkdirs()
+        logFileFolder.mkdirs()
+        FileUtils.cleanDirectory(logFileFolder)
+      }
+
+      task("finalize-$name-${d.name}").doLast {
+        def outputFile = new File(logFileFolder, 'LAP_HVS_2024_v230717_validation.xlsx')
+        def renamedFile = new File(logFileFolder, "DF7_10_NAP_MajorRoads_${d.name}.xlsx")
+        outputFile.renameTo(renamedFile)
+      }
+
+      tasks['validate-all'].dependsOn("validate-$name-${d.name}")
+    }
+}
+
+config.aggregations.each { name, settings ->
+    def projectFile = new File(configBasePath, settings.project)
+
+    String targetName = "$name"
+    File targetFolder = settings.targetFolder ? new File(configBasePath, settings.targetFolder) : new File('result', targetName)
+
+    def inputFolder = new File(configBasePath, settings.table.path)
+
+    task("aggregate-$name", type: hale.transform()) {
+      assert projectFile != null
+      transformation = projectFile
+
+      logToConsole = false
+      logFolder = targetFolder
+
+      inputFolder.eachDir { d ->
+        source(d) {
+          include '*.xlsx'
+          provider 'eu.esdihumboldt.hale.io.xls.reader.instance'
+          setting 'contentType', 'eu.esdihumboldt.hale.io.xls.xlsx'
+          setting 'skip', '1'
+          setting 'multiSheet', 'true'
+          setting 'dateTimeFormatterDefault', '[dd.MM.yyyy]'
+        }
+      }
+
+      target(new File(targetFolder, settings.targetFileName ?: 'output.xlsx')) {
+        provider 'eu.esdihumboldt.hale.io.xls.writer.instance'
+        setting 'selectedExportType', 'NoiseActionPlanMajorRoad,NAP_MajorRoad,NAP_MajorRoadCompetentAuthority,NAP_MajorRoadLimitValues,NAP_RoadMappingResultDetail,NAP_RoadReductionMeasure,NAP_RoadReductionHealthImpact_1,NAP_RoadReductionHealthImpact_2,NAP_RoadReductionHealthImpact_3,ESTATUnitReference,DatasetDefaultProperties,CodelistProperties'
+      }
+
+      printStacktrace = true
+      trustGroovy = true
+      ignoreExitValue = false
+
+      additionalArgs << '-statisticsOut'
+      additionalArgs << "${targetFolder}/statistics.json"
+      additionalArgs << '-reportsOut'
+      additionalArgs << "${targetFolder}/reports.out"
+
+      description "Validierte Daten auf Basis des hale»studio-Projekts \"${projectFile.name}\" aggregieren."
+      group 'Aggregation'
+    }
+
+    tasks["aggregate-$name"].doFirst {
+      targetFolder.mkdirs()
+      FileUtils.cleanDirectory(targetFolder)
+    }
+
+    tasks['aggregate-all'].dependsOn("aggregate-$name")
 }
 
 config.targetEPSG.each { epsg ->

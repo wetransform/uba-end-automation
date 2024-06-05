@@ -1,6 +1,26 @@
 {
   "targetEPSG": ["3035"],
   "additionalEPSG": [],
+  "validations": {
+    "nap-majorroad": {
+      "project": "majorroad/UBA-DE_HVS_to_END_DF7_10_Roads.halez",
+      "table": {
+        "path": "majorroad/input"
+      },
+      "targetFolder": "majorroad/validation",
+      "targetFileName": "LAP_HVS_2024_v230717_validation.xlsx"
+    }
+  },
+  "aggregations": {
+    "nap-majorroad": {
+      "project": "majorroad/DF7_10_Roads_Aggregations.halez",
+      "table": {
+        "path": "majorroad/validation/"
+      },
+      "targetFolder": "majorroad/output",
+      "targetFileName": "LAP_HVS_2024_v230717_aggregated.xlsx"
+    }
+  },
   "transformations": {
     "majorroad": {
       "project": "majorroad/DF4_8_majorroads_xls+shp-to-geopackage.halez",
