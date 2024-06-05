@@ -1,4 +1,4 @@
-# Datenberichterstattung nach der EU-Umgebungslärmrichtlinie – Lärmkartierung
+# Datenberichterstattung nach der EU-Umgebungslärmrichtlinie
 
 ## Voraussetzungen
 
@@ -39,7 +39,9 @@ In der Datei `gradle.properties` können folgende Einstellungen vorgenommen werd
 
 Beispiele für alle Einstellungen befinden sich in der Datei `gradle.properties.sample`.
 
-## Konfiguration der Transformationsprojekte
+## Datenfluss 4_8
+
+### Konfiguration der Transformationsprojekte
 
 In der Datei `config.json` können Details zu den Transformationen konfiguriert werden:
 
@@ -51,9 +53,9 @@ In der Datei `config.json` können Details zu den Transformationen konfiguriert 
 - `targetFolder`: Pfad, in den das Transformationsergebnis geschrieben wird (relativ zu `configBasePath`)
 - `targetFileName`: Dateiname für das Transformationsergebnis
 
-## Ordnerstruktur
+### Ordnerstruktur
 
-In der Standardkonfiguration wird folgende Ordnerstruktur unterhalb von `configBasePath` erwartet:
+Für den Datenfluss 4_8 wird in der Standardkonfiguration folgende Ordnerstruktur unterhalb von `configBasePath` erwartet:
 
     <configBasePath>/
     ├─ agg/
@@ -77,7 +79,7 @@ In der Standardkonfiguration wird folgende Ordnerstruktur unterhalb von `configB
     │  ├─ input/
     │  ├─ output/
 
-## Transformation
+### Transformation
 
 Mit dem Befehl `gradlew transform-all` können alle in `config.json` konfigurierten Transformationen ausgeführt werden.
 
