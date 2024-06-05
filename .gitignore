@@ -1,7 +1,10 @@
+/.vscode/
 /.gradle/
 gradle.properties
 /build/
 /*.zip
 *.rej
 /result/
+/workspace/
+/*.log
 pathing.jar
