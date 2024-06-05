@@ -5,17 +5,24 @@
 Um die Transformationen ausführen zu können, muss zunächst die Datei `gradle.properties` der mindestens die
 Einstellungen `configBasePath` und `haleCliExecutable` definiert (s. Abschnitt "Konfiguration").
 
-Es muss eine Runtime-Umgebung von Java 8 zur Verfügung stehen. Ist Java 8 nicht die Standard-Java-Version, muss
-vor dem Ausführen der Transformationsaufgaben die Umgebungvariable `JAVA_HOME` auf den Pfad zur Java-8-Installation
+Es muss eine Runtime-Umgebung von Java 17 zur Verfügung stehen. Ist Java 17 nicht die Standard-Java-Version, muss
+vor dem Ausführen der Transformationsaufgaben die Umgebungvariable `JAVA_HOME` auf den Pfad zur Java-17-Installation
 gesetzt werden:
 
 Windows:
 
-    set JAVA_HOME=C:/Pfad/zu/Java8
+    set JAVA_HOME=C:/Pfad/zu/Java17
 
 Linux/Mac:
 
-    export JAVA_HOME=/path/to/Java8
+    export JAVA_HOME=/path/to/Java17
+
+Damit Umlaute und andere Sonderzeichen unter Windows korrekt angezeigt werden, muss zusätzlich folgender Befehl
+ausgeführt werden, um die Codepage der Eingabeaufforderung auf UTF-8 umzustellen:
+
+Windows:
+
+    chcp 65001
 
 ## Konfiguration von hale
 
