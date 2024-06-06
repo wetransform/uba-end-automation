@@ -1,0 +1,24 @@
+---
+  branches:
+    - master
+    - ci/semantic-release
+
+  plugins:
+    - - "@semantic-release/commit-analyzer"
+      # see https://github.com/semantic-release/commit-analyzer?tab=readme-ov-file#options
+      - preset: conventionalcommits
+    - - "@semantic-release/release-notes-generator"
+      # see https://github.com/semantic-release/release-notes-generator?tab=readme-ov-file#options
+      - preset: conventionalcommits
+        presetConfig:
+          issuePrefixes: ['ING-', 'WGS-', 'SVC-']
+          issueUrlFormat: 'https://wetransform.atlassian.net/browse/{{prefix}}{{id}}'
+        parserOpts:
+          # https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-commits-parser#referenceactions
+          # set to null to reference an issue without action (but will still show it "closes" the issue in the changelog)
+          # referenceActions: null
+    - "@semantic-release/changelog"
+    - - "@semantic-release/git"
+      - assets:
+          - CHANGELOG.md
+    - "@semantic-release/github"
