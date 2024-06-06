@@ -14,6 +14,10 @@ buildscript {
   }
 }
 
+plugins {
+  id 'distribution'
+}
+
 apply plugin: 'to.wetransform.hale'
 
 hale {
@@ -253,6 +257,29 @@ config.targetEPSG.each { epsg ->
 configurations.all {
   resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
+
+distributions {
+  main {
+    distributionBaseName = 'uba-end-automation'
+    contents {
+      from('.') {
+        include '*'
+        include 'gradle/**'
+        exclude '.git'
+        exclude '.github'
+        exclude '.gitignore'
+        exclude '.gradle'
+        exclude '.vscode'
+        exclude '.wetf-repo.yml'
+        exclude '*.log'
+        exclude 'gradle.properties'
+        exclude 'build/**'
+        exclude 'workspace'
+      }
+    }
+  }
+}
+
 
 /*
  * Gradle wrapper
