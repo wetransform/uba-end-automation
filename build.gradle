@@ -273,6 +273,7 @@ distributions {
         exclude '.github'
         exclude '.gitignore'
         exclude '.gradle'
+        exclude '.releaserc.yml'
         exclude '.vscode'
         exclude '.wetf-repo.yml'
         exclude '*.log'
