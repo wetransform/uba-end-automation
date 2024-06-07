@@ -74,63 +74,65 @@ config.validations.each { name, settings ->
     // File outputFolder = new File(targetFolder, 'results')
 
     def inputFolder = new File(configBasePath, settings.table.path)
-    inputFolder.eachDir { d ->
+    if (inputFolder.exists()) {
+      inputFolder.eachDir { d ->
 
-      File logFileFolder = new File(targetFolder, d.name)
-      logFileFolder.mkdirs()
-
-      task("validate-$name-${d.name}", type: hale.transform()) {
-        assert projectFile != null
-        transformation = projectFile
-
-        logToConsole = false
-        logFolder = logFileFolder
-
-        source(d) {
-          include '*.xlsx'
-          provider 'eu.esdihumboldt.hale.io.xls.reader.instance'
-          setting 'contentType', 'eu.esdihumboldt.hale.io.xls.xlsx'
-          setting 'skip', '0'
-          setting 'multiSheet', 'true'
-          setting 'dateTimeFormatterDefault', '[dd.MM.yyyy]'
-        }
-
-        target(new File(logFileFolder, settings.targetFileName ?: 'output.xlsx')) {
-          provider 'eu.esdihumboldt.hale.io.xls.writer.instance'
-          setting 'selectedExportType', 'NoiseActionPlanMajorRoad,NAP_MajorRoad,NAP_MajorRoadCompetentAuthority,NAP_MajorRoadLimitValues,NAP_RoadMappingResultDetail,NAP_RoadReductionMeasure,NAP_RoadReductionHealthImpact_1,NAP_RoadReductionHealthImpact_2,NAP_RoadReductionHealthImpact_3,ESTATUnitReference,DatasetDefaultProperties,CodelistProperties'
-        }
-
-        printStacktrace = true
-        trustGroovy = true
-        ignoreExitValue = false
-
-        additionalArgs << '-statisticsOut'
-        additionalArgs << "${logFileFolder}/statistics.json"
-        additionalArgs << '-reportsOut'
-        additionalArgs << "${logFileFolder}/reports.out"
-        additionalArgs << '-successEvaluation'
-        additionalArgs << 'successEvaluation.groovy'
-
-        description "Eingabedaten auf Basis des hale»studio-Projekts \"${projectFile.name}\" validieren."
-        group 'Validierung'
-
-        dependsOn 'prepare-validation-summary'
-        finalizedBy "finalize-$name-${d.name}"
-      }
-
-      tasks["validate-$name-${d.name}"].doFirst {
-        targetFolder.mkdirs()
+        File logFileFolder = new File(targetFolder, d.name)
         logFileFolder.mkdirs()
-        FileUtils.cleanDirectory(logFileFolder)
-      }
 
-      task("finalize-$name-${d.name}").doLast {
-        def outputFile = new File(logFileFolder, 'LAP_HVS_2024_v230717_validation.xlsx')
-        def renamedFile = new File(logFileFolder, "DF7_10_NAP_MajorRoads_${d.name}.xlsx")
-        outputFile.renameTo(renamedFile)
-      }
+        task("validate-$name-${d.name}", type: hale.transform()) {
+          assert projectFile != null
+          transformation = projectFile
 
-      tasks['validate-all'].dependsOn("validate-$name-${d.name}")
+          logToConsole = false
+          logFolder = logFileFolder
+
+          source(d) {
+            include '*.xlsx'
+            provider 'eu.esdihumboldt.hale.io.xls.reader.instance'
+            setting 'contentType', 'eu.esdihumboldt.hale.io.xls.xlsx'
+            setting 'skip', '0'
+            setting 'multiSheet', 'true'
+            setting 'dateTimeFormatterDefault', '[dd.MM.yyyy]'
+          }
+
+          target(new File(logFileFolder, settings.targetFileName ?: 'output.xlsx')) {
+            provider 'eu.esdihumboldt.hale.io.xls.writer.instance'
+            setting 'selectedExportType', 'NoiseActionPlanMajorRoad,NAP_MajorRoad,NAP_MajorRoadCompetentAuthority,NAP_MajorRoadLimitValues,NAP_RoadMappingResultDetail,NAP_RoadReductionMeasure,NAP_RoadReductionHealthImpact_1,NAP_RoadReductionHealthImpact_2,NAP_RoadReductionHealthImpact_3,ESTATUnitReference,DatasetDefaultProperties,CodelistProperties'
+          }
+
+          printStacktrace = true
+          trustGroovy = true
+          ignoreExitValue = false
+
+          additionalArgs << '-statisticsOut'
+          additionalArgs << "${logFileFolder}/statistics.json"
+          additionalArgs << '-reportsOut'
+          additionalArgs << "${logFileFolder}/reports.out"
+          additionalArgs << '-successEvaluation'
+          additionalArgs << 'successEvaluation.groovy'
+
+          description "Eingabedaten auf Basis des hale»studio-Projekts \"${projectFile.name}\" validieren."
+          group 'Validierung'
+
+          dependsOn 'prepare-validation-summary'
+          finalizedBy "finalize-$name-${d.name}"
+        }
+
+        tasks["validate-$name-${d.name}"].doFirst {
+          targetFolder.mkdirs()
+          logFileFolder.mkdirs()
+          FileUtils.cleanDirectory(logFileFolder)
+        }
+
+        task("finalize-$name-${d.name}").doLast {
+          def outputFile = new File(logFileFolder, 'LAP_HVS_2024_v230717_validation.xlsx')
+          def renamedFile = new File(logFileFolder, "DF7_10_NAP_MajorRoads_${d.name}.xlsx")
+          outputFile.renameTo(renamedFile)
+        }
+
+        tasks['validate-all'].dependsOn("validate-$name-${d.name}")
+      }
     }
 }
 
@@ -149,14 +151,16 @@ config.aggregations.each { name, settings ->
       logToConsole = false
       logFolder = targetFolder
 
-      inputFolder.eachDir { d ->
-        source(d) {
-          include '*.xlsx'
-          provider 'eu.esdihumboldt.hale.io.xls.reader.instance'
-          setting 'contentType', 'eu.esdihumboldt.hale.io.xls.xlsx'
-          setting 'skip', '1'
-          setting 'multiSheet', 'true'
-          setting 'dateTimeFormatterDefault', '[dd.MM.yyyy]'
+      if (inputFolder.exists()) {
+        inputFolder.eachDir { d ->
+          source(d) {
+            include '*.xlsx'
+            provider 'eu.esdihumboldt.hale.io.xls.reader.instance'
+            setting 'contentType', 'eu.esdihumboldt.hale.io.xls.xlsx'
+            setting 'skip', '1'
+            setting 'multiSheet', 'true'
+            setting 'dateTimeFormatterDefault', '[dd.MM.yyyy]'
+          }
         }
       }
 
