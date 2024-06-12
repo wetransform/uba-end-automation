@@ -88,5 +88,4 @@ jobs:
             ${{ env.SEMANTIC_RELEASE_GIT_VERSION }} \
             conventional-changelog-conventionalcommits@\
             ${{ env.CONVENTIONAL_CHANGELOG_CONVENTIONALCOMMITS_VERSION }} \
-            semantic-release-github-actions-tags@\
             "
