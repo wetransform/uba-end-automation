@@ -21,7 +21,7 @@ plugins {
 apply plugin: 'to.wetransform.hale'
 
 hale {
-  cliVersion = '5.2.0-SNAPSHOT'
+  cliVersion = '5.3.0'
 }
 
 import org.apache.commons.io.FileUtils
