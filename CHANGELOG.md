@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/wetransform/uba-end-automation/compare/v2.0.0...v2.0.1) (2024-08-27)
+
+
+### Bug Fixes
+
+* use hale»studio 5.3.0 libraries ([9246963](https://github.com/wetransform/uba-end-automation/commit/92469631306987bb7731bcb958e0773f5e4a70c6)), closes [SVC-1812](https://wetransform.atlassian.net/browse/SVC-1812)
+
 ## [2.0.0](https://github.com/wetransform/uba-end-automation/compare/v1.1.1...v2.0.0) (2024-06-07)
 
 
