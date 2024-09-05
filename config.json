@@ -17,6 +17,14 @@
       },
       "targetFolder": "majorair/validation",
       "targetFileName": "LAP_GFH_2024_v230717_validation.xlsx"
+    },
+    "nap-majorrail": {
+      "project": "majorrail/UBA-DE_HES_to_END_DF7_10_Railway.halez",
+      "table": {
+        "path": "majorrail/input"
+      },
+      "targetFolder": "majorrail/validation",
+      "targetFileName": "LAP_HES_2024_v230717_validation.xlsx"
     }
   },
   "aggregations": {
@@ -35,6 +43,14 @@
       },
       "targetFolder": "majorair/output",
       "targetFileName": "LAP_GFH_2024_v230717_aggregated.xlsx"
+    },
+    "nap-majorrail": {
+      "project": "majorrail/DF7_10_Railway_Aggregations.halez",
+      "table": {
+        "path": "majorrail/validation/"
+      },
+      "targetFolder": "majorrail/output",
+      "targetFileName": "LAP_HES_2024_v230717_aggregated.xlsx"
     }
   },
   "transformations": {
