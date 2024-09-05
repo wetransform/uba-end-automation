@@ -97,8 +97,7 @@ config.validations.each { name, settings ->
           }
 
           target(new File(logFileFolder, settings.targetFileName ?: 'output.xlsx')) {
-            provider 'eu.esdihumboldt.hale.io.xls.writer.instance'
-            setting 'selectedExportType', 'NoiseActionPlanMajorRoad,NAP_MajorRoad,NAP_MajorRoadCompetentAuthority,NAP_MajorRoadLimitValues,NAP_RoadMappingResultDetail,NAP_RoadReductionMeasure,NAP_RoadReductionHealthImpact_1,NAP_RoadReductionHealthImpact_2,NAP_RoadReductionHealthImpact_3,ESTATUnitReference,DatasetDefaultProperties,CodelistProperties'
+            preset 'default'
           }
 
           printStacktrace = true
@@ -165,8 +164,7 @@ config.aggregations.each { name, settings ->
       }
 
       target(new File(targetFolder, settings.targetFileName ?: 'output.xlsx')) {
-        provider 'eu.esdihumboldt.hale.io.xls.writer.instance'
-        setting 'selectedExportType', 'NoiseActionPlanMajorRoad,NAP_MajorRoad,NAP_MajorRoadCompetentAuthority,NAP_MajorRoadLimitValues,NAP_RoadMappingResultDetail,NAP_RoadReductionMeasure,NAP_RoadReductionHealthImpact_1,NAP_RoadReductionHealthImpact_2,NAP_RoadReductionHealthImpact_3,ESTATUnitReference,DatasetDefaultProperties,CodelistProperties'
+        preset 'default'
       }
 
       printStacktrace = true
