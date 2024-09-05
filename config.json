@@ -9,6 +9,14 @@
       },
       "targetFolder": "majorroad/validation",
       "targetFileName": "LAP_HVS_2024_v230717_validation.xlsx"
+    },
+    "nap-majorair": {
+      "project": "majorair/UBA-DE_GFH_to_END_DF7_10_Airports.halez",
+      "table": {
+        "path": "majorair/input"
+      },
+      "targetFolder": "majorair/validation",
+      "targetFileName": "LAP_GFH_2024_v230717_validation.xlsx"
     }
   },
   "aggregations": {
@@ -19,6 +27,14 @@
       },
       "targetFolder": "majorroad/output",
       "targetFileName": "LAP_HVS_2024_v230717_aggregated.xlsx"
+    },
+    "nap-majorair": {
+      "project": "majorair/DF7_10_Airports_Aggregations.halez",
+      "table": {
+        "path": "majorair/validation/"
+      },
+      "targetFolder": "majorair/output",
+      "targetFileName": "LAP_GFH_2024_v230717_aggregated.xlsx"
     }
   },
   "transformations": {
