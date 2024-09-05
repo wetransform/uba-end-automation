@@ -1,6 +1,12 @@
 def summaryFile = new File('Zusammenfassung.log')
 
-def sourceFileUrl = new URL(aggregated['eu.esdihumboldt.hale.io.instance.read.source'].report.location)
+def sourceFileUrl = aggregated['eu.esdihumboldt.hale.io.instance.read.source'].report.location
+if ([Collection, Object[]].any { it.isAssignableFrom(sourceFileUrl.getClass()) }) {
+    sourceFileUrl = new URL(sourceFileUrl[0])
+}
+else {
+    sourceFileUrl = new URL(sourceFileUrl)
+}
 def sourceFile = new File(sourceFileUrl.toURI())
 
 if (aggregated['eu.esdihumboldt.hale.transform'].report.errors > 0) {
