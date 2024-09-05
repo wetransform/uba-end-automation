@@ -111,6 +111,20 @@ config.validations.each { name, settings ->
             }
           }
 
+          source(d) {
+            include '*.shp'
+            provider 'eu.esdihumboldt.hale.io.shape.reader.instance'
+            setting 'contentType', 'eu.esdihumboldt.hale.io.shp'
+            setting 'autoDetectSchemaTypes', 'false'
+            setting 'typename', '{http://www.esdi-humboldt.eu/hale/shp}LAP_Ruhige_Gebiete_Lage'
+          }
+
+          source(d) {
+            include '*.gpkg'
+            provider 'eu.esdihumboldt.hale.io.geopackage.instance.reader'
+            setting 'contentType', 'eu.esdihumboldt.hale.io.geopackage'
+          }
+
           target(new File(logFileFolder, settings.targetFileName ?: 'output.xlsx')) {
             preset 'default'
           }
@@ -174,6 +188,12 @@ config.aggregations.each { name, settings ->
             setting 'skip', '1'
             setting 'multiSheet', 'true'
             setting 'dateTimeFormatterDefault', '[dd.MM.yyyy]'
+          }
+
+          source(d) {
+            include '*.gpkg'
+            provider 'eu.esdihumboldt.hale.io.geopackage.instance.reader'
+            setting 'contentType', 'eu.esdihumboldt.hale.io.geopackage'
           }
         }
       }

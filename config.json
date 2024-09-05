@@ -33,6 +33,26 @@
       },
       "targetFolder": "agg/validation",
       "targetFileName": "LAP_AGG_2024_v230717_validation.xlsx"
+    },
+    "nap-quietareas": {
+      "project": "quiet_areas/UBA-DE_RuhigeGebieteLage_to_DF7_10_QuietAreas.halez",
+      "table": {
+        "path": "quiet_areas/input"
+      },
+      "sheets": [
+        {
+          "index": 0,
+          "typename": "Allgemeines",
+          "skip": 0
+        },
+        {
+          "index": 5,
+          "typename": "Ruhige_Gebiete",
+          "skip": 4
+        }
+      ],
+      "targetFolder": "quiet_areas/validation",
+      "targetFileName": "LAP_Ruhige_Gebiete_Lage_validation.gpkg"
     }
   },
   "aggregations": {
@@ -67,6 +87,14 @@
       },
       "targetFolder": "agg/output",
       "targetFileName": "LAP_AGG_2024_v230717_aggregated.xlsx"
+    },
+    "nap-quietareas": {
+      "project": "quiet_areas/DF7_10_QuietAreas_Aggregations.halez",
+      "table": {
+        "path": "quiet_areas/validation/"
+      },
+      "targetFolder": "quiet_areas/output",
+      "targetFileName": "LAP_Ruhige_Gebiete_Lage_aggregated.gpkg"
     }
   },
   "transformations": {
