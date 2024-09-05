@@ -137,6 +137,18 @@ Für den Datenfluss 7_10 wird in der Standardkonfiguration folgende Ordnerstrukt
     |  │  ├─ <Plan_n>/
     │  ├─ output/
     │  ├─ validation/
+    ├─ quiet_areas/
+    │  ├─ UBA-DE_RuhigeGebieteLage_to_DF7_10_QuietAreas.halez
+    │  ├─ DF7_10_QuietAreas_Aggregations.halez
+    │  ├─ input/
+    |  │  ├─ <Plan_1>/
+    |  |  |  ├─ <Plandatei_UBA>.xlsx
+    |  |  |  ├─ LAP_Ruhige_Gebiete_Lage.shp (+ zugehörige Dateien)
+    |  │  ├─ <Plan_2>/
+    |  │  ├─ ...
+    |  │  ├─ <Plan_n>/
+    │  ├─ output/
+    │  ├─ validation/
 
 ### Validierung
 
