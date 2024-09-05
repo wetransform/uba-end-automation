@@ -25,6 +25,14 @@
       },
       "targetFolder": "majorrail/validation",
       "targetFileName": "LAP_HES_2024_v230717_validation.xlsx"
+    },
+    "nap-agg": {
+      "project": "agg/UBA-DE_AGG_to_END_DF7_10_Agglomerations.halez",
+      "table": {
+        "path": "agg/input"
+      },
+      "targetFolder": "agg/validation",
+      "targetFileName": "LAP_AGG_2024_v230717_validation.xlsx"
     }
   },
   "aggregations": {
@@ -51,6 +59,14 @@
       },
       "targetFolder": "majorrail/output",
       "targetFileName": "LAP_HES_2024_v230717_aggregated.xlsx"
+    },
+    "nap-agg": {
+      "project": "agg/DF7_10_Agglomerations_Aggregations.halez",
+      "table": {
+        "path": "agg/validation/"
+      },
+      "targetFolder": "agg/output",
+      "targetFileName": "LAP_AGG_2024_v230717_aggregated.xlsx"
     }
   },
   "transformations": {
