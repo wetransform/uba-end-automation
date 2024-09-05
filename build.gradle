@@ -87,13 +87,28 @@ config.validations.each { name, settings ->
           logToConsole = false
           logFolder = logFileFolder
 
-          source(d) {
-            include '*.xlsx'
-            provider 'eu.esdihumboldt.hale.io.xls.reader.instance'
-            setting 'contentType', 'eu.esdihumboldt.hale.io.xls.xlsx'
-            setting 'skip', '0'
-            setting 'multiSheet', 'true'
-            setting 'dateTimeFormatterDefault', '[dd.MM.yyyy]'
+          if (settings.sheets) {
+            settings.sheets.each { s ->
+              source(d) {
+                include '*.xlsx'
+                provider 'eu.esdihumboldt.hale.io.xls.reader.instance'
+                setting 'contentType', 'eu.esdihumboldt.hale.io.xls.xlsx'
+                setting 'skip', "${s.skip}"
+                setting 'sheetIndex', "${s.index}"
+                setting 'typename', "${s.typename}"
+                setting 'dateTimeFormatterDefault', '[dd.MM.yyyy]'
+              }
+            }
+          }
+          else {
+            source(d) {
+              include '*.xlsx'
+              provider 'eu.esdihumboldt.hale.io.xls.reader.instance'
+              setting 'contentType', 'eu.esdihumboldt.hale.io.xls.xlsx'
+              setting 'skip', '0'
+              setting 'multiSheet', 'true'
+              setting 'dateTimeFormatterDefault', '[dd.MM.yyyy]'
+            }
           }
 
           target(new File(logFileFolder, settings.targetFileName ?: 'output.xlsx')) {
