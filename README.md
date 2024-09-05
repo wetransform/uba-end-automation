@@ -93,6 +93,39 @@ Eine Liste aller verfügbaren Transformationen kann mit `gradlew tasks` abgerufe
 Für den Datenfluss 7_10 wird in der Standardkonfiguration folgende Ordnerstruktur unterhalb von `configBasePath` erwartet:
 
     <configBasePath>/
+    ├─ agg/
+    │  ├─ UBA-DE_AGG_to_END_DF7_10_Agglomerations.halez
+    │  ├─ DF7_10_Agglomerations_Aggregations.halez
+    │  ├─ input/
+    |  │  ├─ <Plan_1>/
+    |  |  |  ├─ <Plandatei_UBA>.xlsx
+    |  │  ├─ <Plan_2>/
+    |  │  ├─ ...
+    |  │  ├─ <Plan_n>/
+    │  ├─ output/
+    │  ├─ validation/
+    ├─ majorair/
+    │  ├─ UBA-DE_GFH_to_END_DF7_10_Airports.halez
+    │  ├─ DF7_10_Airports_Aggregations.halez
+    │  ├─ input/
+    |  │  ├─ <Plan_1>/
+    |  |  |  ├─ <Plandatei_UBA>.xlsx
+    |  │  ├─ <Plan_2>/
+    |  │  ├─ ...
+    |  │  ├─ <Plan_n>/
+    │  ├─ output/
+    │  ├─ validation/
+    ├─ majorrail/
+    │  ├─ UBA-DE_HES_to_END_DF7_10_Railway.halez
+    │  ├─ DF7_10_Railway_Aggregations.halez
+    │  ├─ input/
+    |  │  ├─ <Plan_1>/
+    |  |  |  ├─ <Plandatei_UBA>.xlsx
+    |  │  ├─ <Plan_2>/
+    |  │  ├─ ...
+    |  │  ├─ <Plan_n>/
+    │  ├─ output/
+    │  ├─ validation/
     ├─ majorroad/
     │  ├─ UBA-DE_HVS_to_END_DF7_10_Roads.halez
     │  ├─ DF7_10_Roads_Aggregations.halez
