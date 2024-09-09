@@ -125,6 +125,21 @@ config.validations.each { name, settings ->
             setting 'contentType', 'eu.esdihumboldt.hale.io.geopackage'
           }
 
+          settings.additionalSources?.each { src ->
+            def additionalSourceFolder
+            if (src.folder) {
+              additionalSourceFolder = new File(configBasePath, src.folder)
+            }
+            else {
+              additionalSourceFolder = d
+            }
+            source(additionalSourceFolder) {
+              include src.includePattern
+              provider src.provider
+              setting 'contentType', "${src.contentType}"
+            }
+          }
+
           target(new File(logFileFolder, settings.targetFileName ?: 'output.xlsx')) {
             preset 'default'
           }
