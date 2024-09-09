@@ -71,7 +71,7 @@ config.validations.each { name, settings ->
     String targetName = "$name"
     File targetFolder = settings.targetFolder ? new File(configBasePath, settings.targetFolder) : new File('result', targetName)
 
-    // File outputFolder = new File(targetFolder, 'results')
+    def vg250Folder = new File(configBasePath, config.coverageArea.vg250Folder)
 
     def inputFolder = new File(configBasePath, settings.table.path)
     if (inputFolder.exists()) {
@@ -111,20 +111,6 @@ config.validations.each { name, settings ->
             }
           }
 
-          source(d) {
-            include '*.shp'
-            provider 'eu.esdihumboldt.hale.io.shape.reader.instance'
-            setting 'contentType', 'eu.esdihumboldt.hale.io.shp'
-            setting 'autoDetectSchemaTypes', 'false'
-            setting 'typename', '{http://www.esdi-humboldt.eu/hale/shp}LAP_Ruhige_Gebiete_Lage'
-          }
-
-          source(d) {
-            include '*.gpkg'
-            provider 'eu.esdihumboldt.hale.io.geopackage.instance.reader'
-            setting 'contentType', 'eu.esdihumboldt.hale.io.geopackage'
-          }
-
           settings.additionalSources?.each { src ->
             def additionalSourceFolder
             if (src.folder) {
@@ -159,13 +145,15 @@ config.validations.each { name, settings ->
           group 'Validierung'
 
           dependsOn 'prepare-validation-summary'
+          if (settings.coverageArea) {
+            dependsOn "validate-$name-${d.name}-coveragearea"
+          }
           finalizedBy "finalize-$name-${d.name}"
         }
 
         tasks["validate-$name-${d.name}"].doFirst {
           targetFolder.mkdirs()
           logFileFolder.mkdirs()
-          FileUtils.cleanDirectory(logFileFolder)
         }
 
         task("finalize-$name-${d.name}").doLast {
@@ -175,6 +163,84 @@ config.validations.each { name, settings ->
         }
 
         tasks['validate-all'].dependsOn("validate-$name-${d.name}")
+
+        if (settings.coverageArea) {
+          task("validate-$name-${d.name}-coveragearea", type: hale.transform()) {
+            transformation = new File(configBasePath, config.coverageArea.validationProject)
+
+            logToConsole = false
+            logFolder = logFileFolder
+
+            source(d) {
+              include '*.xlsx'
+              provider 'eu.esdihumboldt.hale.io.xls.reader.instance'
+              setting 'contentType', 'eu.esdihumboldt.hale.io.xls.xlsx'
+              setting 'skip', '0'
+              setting 'sheetIndex', '0'
+              setting 'typename', 'Allgemeines'
+              setting 'dateTimeFormatterDefault', '[dd.MM.yyyy]'
+            }
+
+            source(d) {
+              include '*.shp'
+              provider 'eu.esdihumboldt.hale.io.shape.reader.instance'
+              setting 'contentType', 'eu.esdihumboldt.hale.io.shp'
+              setting 'autoDetectSchemaTypes', 'false'
+              setting 'typename', '{http://www.esdi-humboldt.eu/hale/shp}LAP_Gebiet'
+            }
+
+            source(vg250Folder) {
+              include 'VG250_GEM.shp'
+              provider 'eu.esdihumboldt.hale.io.shape.reader.instance'
+              setting 'contentType', 'eu.esdihumboldt.hale.io.shp'
+              setting 'autoDetectSchemaTypes', 'false'
+              setting 'typename', '{http://www.esdi-humboldt.eu/hale/shp}VG250_GEM'
+            }
+
+            source(vg250Folder) {
+              include 'VG250_RBZ.shp'
+              provider 'eu.esdihumboldt.hale.io.shape.reader.instance'
+              setting 'contentType', 'eu.esdihumboldt.hale.io.shp'
+              setting 'autoDetectSchemaTypes', 'false'
+              setting 'typename', '{http://www.esdi-humboldt.eu/hale/shp}VG250_RBZ'
+            }
+
+            source(vg250Folder) {
+              include 'VG250_VWG.shp'
+              provider 'eu.esdihumboldt.hale.io.shape.reader.instance'
+              setting 'contentType', 'eu.esdihumboldt.hale.io.shp'
+              setting 'autoDetectSchemaTypes', 'false'
+              setting 'typename', '{http://www.esdi-humboldt.eu/hale/shp}VG250_VWG'
+            }
+
+            target(new File(logFileFolder, 'LAP_Gebiet.gpkg')) {
+              preset 'default'
+            }
+
+            printStacktrace = true
+            trustGroovy = true
+            ignoreExitValue = false
+
+            additionalArgs << '-statisticsOut'
+            additionalArgs << "${logFileFolder}/statistics_coveragearea.json"
+            additionalArgs << '-reportsOut'
+            additionalArgs << "${logFileFolder}/reports_coveragearea.out"
+            additionalArgs << '-successEvaluation'
+            additionalArgs << 'successEvaluation.groovy'
+
+            description "Gültigkeitsbereich auf Basis des hale»studio-Projekts \"${config.coverageArea.validationProject}\" validieren."
+            group 'Validierung'
+
+            dependsOn 'prepare-validation-summary'
+            finalizedBy "finalize-$name-${d.name}-coveragearea"
+          }
+
+          task("finalize-$name-${d.name}-coveragearea").doLast {
+            def outputFile = new File(logFileFolder, 'LAP_Gebiet.gpkg')
+            def renamedFile = new File(logFileFolder, "LAP_Gebiet_${d.name}.gpkg")
+            outputFile.renameTo(renamedFile)
+          }
+        }
       }
     }
 }

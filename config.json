@@ -1,12 +1,18 @@
 {
   "targetEPSG": ["3035"],
   "additionalEPSG": [],
+  "coverageArea": {
+    "validationProject": "coverage_areas/UBA-DE_Gebiet_to_DF7_10_CoverageArea.halez",
+    "aggregationProject": "",
+    "vg250Folder": "coverage_areas/VG250"
+  },
   "validations": {
     "nap-majorroad": {
       "project": "majorroad/UBA-DE_HVS_to_END_DF7_10_Roads.halez",
       "table": {
         "path": "majorroad/input"
       },
+      "coverageArea": true,
       "targetFolder": "majorroad/validation",
       "targetFileName": "LAP_HVS_2024_v230717_validation.xlsx"
     },
@@ -15,6 +21,7 @@
       "table": {
         "path": "majorair/input"
       },
+      "coverageArea": true,
       "targetFolder": "majorair/validation",
       "targetFileName": "LAP_GFH_2024_v230717_validation.xlsx"
     },
@@ -23,6 +30,7 @@
       "table": {
         "path": "majorrail/input"
       },
+      "coverageArea": true,
       "targetFolder": "majorrail/validation",
       "targetFileName": "LAP_HES_2024_v230717_validation.xlsx"
     },
@@ -31,6 +39,7 @@
       "table": {
         "path": "agg/input"
       },
+      "coverageArea": true,
       "targetFolder": "agg/validation",
       "targetFileName": "LAP_AGG_2024_v230717_validation.xlsx"
     },
@@ -49,6 +58,13 @@
           "index": 5,
           "typename": "Ruhige_Gebiete",
           "skip": 4
+        }
+      ],
+      "additionalSources": [
+        {
+          "includePattern": "*.shp",
+          "provider": "eu.esdihumboldt.hale.io.shape.reader.instance",
+          "contentType": "eu.esdihumboldt.hale.io.shp"
         }
       ],
       "targetFolder": "quiet_areas/validation",
