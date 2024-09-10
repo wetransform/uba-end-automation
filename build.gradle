@@ -50,9 +50,27 @@ task('validate-all') {
   group 'Validierung'
 }
 
+task('clean-all-validations') {
+  description 'Entfernt alle Ausgaben der Validierungsläufe'
+  group 'Validierung'
+}
+
 task('aggregate-all') {
   description 'Führt alle Aggregationen durch'
   group 'Aggregation'
+}
+
+task('clean-all-aggregations') {
+  description 'Entfernt alle Ausgaben der Aggregtionsläufe'
+  group 'Aggregation'
+}
+
+task('clean-all') {
+  description 'Entfernt alle Ausgaben der Validierungs- und Aggregationsläufe'
+  group 'DF7_10'
+
+  dependsOn 'clean-all-validations'
+  dependsOn 'clean-all-aggregations'
 }
 
 task('prepare-validation-summary').doFirst {
@@ -72,6 +90,11 @@ config.validations.each { name, settings ->
     File targetFolder = settings.targetFolder ? new File(configBasePath, settings.targetFolder) : new File('result', targetName)
 
     def vg250Folder = new File(configBasePath, config.coverageArea.vg250Folder)
+
+    task("validate-$name-all") {
+      description "Führt alle Validierungen für $name durch"
+      group 'Validierung'
+    }
 
     def inputFolder = new File(configBasePath, settings.table.path)
     if (inputFolder.exists()) {
@@ -162,7 +185,18 @@ config.validations.each { name, settings ->
           outputFile.renameTo(renamedFile)
         }
 
+        task("clean-validation-$name-${d.name}") {
+          group 'Validierung'
+        }.doLast {
+          if (targetFolder.exists()) {
+            FileUtils.cleanDirectory(targetFolder)
+          }
+        }
+
+        tasks['clean-all'].dependsOn("clean-validation-$name-${d.name}")
+
         tasks['validate-all'].dependsOn("validate-$name-${d.name}")
+        tasks["validate-$name-all"].dependsOn("validate-$name-${d.name}")
 
         if (settings.coverageArea) {
           task("validate-$name-${d.name}-coveragearea", type: hale.transform()) {
@@ -344,6 +378,16 @@ config.aggregations.each { name, settings ->
       tasks['aggregate-all'].dependsOn("aggregate-$name-coveragearea")
     }
 
+    task("clean-aggregation-$name") {
+      description "Entfernt die Aggregationsergebnisse für $name"
+      group 'Aggregation'
+    }.doLast {
+      if (targetFolder.exists()) {
+        FileUtils.cleanDirectory(targetFolder)
+      }
+    }
+
+    tasks['clean-all-aggregations'].dependsOn("clean-aggregation-$name")
 }
 
 config.targetEPSG.each { epsg ->
