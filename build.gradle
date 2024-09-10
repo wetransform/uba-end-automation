@@ -199,11 +199,14 @@ config.validations.each { name, settings ->
         tasks["validate-$name-all"].dependsOn("validate-$name-${d.name}")
 
         if (settings.coverageArea) {
+          def coverageAreaLogFolder = new File(logFileFolder, 'logs_coverage_area')
+          coverageAreaLogFolder.mkdirs()
+
           task("validate-$name-${d.name}-coveragearea", type: hale.transform()) {
             transformation = new File(configBasePath, config.coverageArea.validationProject)
 
             logToConsole = false
-            logFolder = logFileFolder
+            logFolder = coverageAreaLogFolder
 
             source(d) {
               include '*.xlsx'
@@ -256,9 +259,9 @@ config.validations.each { name, settings ->
             ignoreExitValue = false
 
             additionalArgs << '-statisticsOut'
-            additionalArgs << "${logFileFolder}/statistics_coveragearea.json"
+            additionalArgs << "${coverageAreaLogFolder}/statistics_coveragearea.json"
             additionalArgs << '-reportsOut'
-            additionalArgs << "${logFileFolder}/reports_coveragearea.out"
+            additionalArgs << "${coverageAreaLogFolder}/reports_coveragearea.out"
             additionalArgs << '-successEvaluation'
             additionalArgs << 'successEvaluation.groovy'
 
@@ -341,12 +344,15 @@ config.aggregations.each { name, settings ->
     tasks['aggregate-all'].dependsOn("aggregate-$name")
 
     if (settings.coverageArea) {
+      def coverageAreaLogFolder = new File(targetFolder, 'logs_coverage_area')
+      coverageAreaLogFolder.mkdirs()
+
       task("aggregate-$name-coveragearea", type: hale.transform()) {
         assert projectFile != null
         transformation = new File(configBasePath, config.coverageArea.aggregationProject)
 
         logToConsole = false
-        logFolder = targetFolder
+        logFolder = coverageAreaLogFolder
 
         if (inputFolder.exists()) {
           inputFolder.eachDir { d ->
@@ -367,9 +373,9 @@ config.aggregations.each { name, settings ->
         ignoreExitValue = false
 
         additionalArgs << '-statisticsOut'
-        additionalArgs << "${targetFolder}/statistics.json"
+        additionalArgs << "${coverageAreaLogFolder}/statistics_coveragearea.json"
         additionalArgs << '-reportsOut'
-        additionalArgs << "${targetFolder}/reports.out"
+        additionalArgs << "${coverageAreaLogFolder}/reports_coveragearea.out"
 
         description "Gültigkeitsbereiche auf Basis des hale»studio-Projekts \"${config.coverageArea.aggregationProject}\" aggregieren."
         group 'Aggregation'
