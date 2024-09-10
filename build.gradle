@@ -294,14 +294,56 @@ config.aggregations.each { name, settings ->
 
       description "Validierte Daten auf Basis des hale»studio-Projekts \"${projectFile.name}\" aggregieren."
       group 'Aggregation'
+
+      if (settings.coverageArea) {
+        dependsOn "aggregate-$name-coveragearea"
+      }
     }
 
     tasks["aggregate-$name"].doFirst {
       targetFolder.mkdirs()
-      FileUtils.cleanDirectory(targetFolder)
     }
 
     tasks['aggregate-all'].dependsOn("aggregate-$name")
+
+    if (settings.coverageArea) {
+      task("aggregate-$name-coveragearea", type: hale.transform()) {
+        assert projectFile != null
+        transformation = new File(configBasePath, config.coverageArea.aggregationProject)
+
+        logToConsole = false
+        logFolder = targetFolder
+
+        if (inputFolder.exists()) {
+          inputFolder.eachDir { d ->
+            source(d) {
+              include '*.gpkg'
+              provider 'eu.esdihumboldt.hale.io.geopackage.instance.reader'
+              setting 'contentType', 'eu.esdihumboldt.hale.io.geopackage'
+            }
+          }
+        }
+
+        target(new File(targetFolder, "LAP_Gebiet_${name}_aggregated.gpkg")) {
+          preset 'default'
+        }
+
+        printStacktrace = true
+        trustGroovy = true
+        ignoreExitValue = false
+
+        additionalArgs << '-statisticsOut'
+        additionalArgs << "${targetFolder}/statistics.json"
+        additionalArgs << '-reportsOut'
+        additionalArgs << "${targetFolder}/reports.out"
+
+        description "Gültigkeitsbereiche auf Basis des hale»studio-Projekts \"${config.coverageArea.aggregationProject}\" aggregieren."
+        group 'Aggregation'
+      }
+
+      tasks['aggregate-all'].dependsOn("aggregate-$name-coveragearea")
+    }
+
 }
 
 config.targetEPSG.each { epsg ->
