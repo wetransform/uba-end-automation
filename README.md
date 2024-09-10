@@ -149,6 +149,20 @@ Für den Datenfluss 7_10 wird in der Standardkonfiguration folgende Ordnerstrukt
     |  │  ├─ <Plan_n>/
     │  ├─ output/
     │  ├─ validation/
+    ├─ coverage_areas/
+    │  ├─ UBA-DE_Gebiet_to_DF7_10_CoverageArea.halez
+    │  ├─ DF7_10_CoverageArea_Aggregations.halez
+    │  ├─ input/
+    |  │  ├─ <Plan_1>/
+    |  |  |  ├─ <Plandatei_UBA>.xlsx
+    |  |  |  ├─ LAP_Gebiet.shp (+ zugehörige Dateien)
+    |  │  ├─ <Plan_2>/
+    |  │  ├─ ...
+    |  │  ├─ <Plan_n>/
+    │  ├─ VG250/
+    |  │  ├─ VG250_GEM.shp (+ zugehörige Dateien)
+    |  │  ├─ VG250_RBZ.shp (+ zugehörige Dateien)
+    |  │  ├─ VG250_VWG.shp (+ zugehörige Dateien)
 
 ### Validierung
 
@@ -165,10 +179,19 @@ Die detaillierten Log-Ausgaben und Berichte werden im jeweiligen Ausgabeverzeich
 (z. B. `<configBasePath>/majorroad/validation/Plan_1`) abgelegt. Folgende Dateien werden erzeugt:
 
 - `DF7_10_NAP_<Quelle>_<Plan>.xlsx` - Ins EEA-Format überführter Plan
+- `LAP_Gebiet_<Plan>.gpkg` - Abgeleiteter Gültigkeitsbereich
 - `out.log` - Standardausgabe (stdout)
 - `err.log` - Standardfehlerausgabe (stderr)
 - `reports.out` - hale-Berichtsdatei
 - `statistics.json` - Statistikdatei im JSON-Format
+
+Im Unterverzeichnis `logs_coverage_area` werden außerden die Log-Ausgaben und Berichte für die Ableitung der
+Gültigkeitsbereiche abgelegt:
+
+- `out.log` - Standardausgabe (stdout)
+- `err.log` - Standardfehlerausgabe (stderr)
+- `reports_coveragearea.out` - hale-Berichtsdatei zur Ableitung des Gültigkeitsbereichs
+- `statistics_coveragearea.json` - Statistikdatei im JSON-Format zur Ableitung des Gültigkeitsbereichs
 
 ## Aggregation
 
@@ -187,10 +210,19 @@ Die detaillierten Log-Ausgaben und Berichte werden im Ausgabeverzeichnis der Que
 (z. B. `<configBasePath>/majorroad/output`) abgelegt. Folgende Dateien werden erzeugt:
 
 - `<Vorlagenname>_aggregated.xlsx` - Aggregierte Daten
+- `LAP_Gebiet_nap-<Quelle>_aggregated.gpkg` - Aggregierte Gültigkeitsbereiche
 - `out.log` - Standardausgabe (stdout)
 - `err.log` - Standardfehlerausgabe (stderr)
 - `reports.out` - hale-Berichtsdatei
 - `statistics.json` - Statistikdatei im JSON-Format
+
+Im Unterverzeichnis `logs_coverage_area` werden außerden die Log-Ausgaben und Berichte für die Ableitung der
+Gültigkeitsbereiche abgelegt:
+
+- `out.log` - Standardausgabe (stdout)
+- `err.log` - Standardfehlerausgabe (stderr)
+- `reports_coveragearea.out` - hale-Berichtsdatei zur Ableitung des Gültigkeitsbereichs
+- `statistics_coveragearea.json` - Statistikdatei im JSON-Format zur Ableitung des Gültigkeitsbereichs
 
 ## Bekannte Probleme
 
