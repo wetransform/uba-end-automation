@@ -3,7 +3,8 @@
   "additionalEPSG": [],
   "coverageArea": {
     "validationProject": "coverage_areas/UBA-DE_Gebiet_to_DF7_10_CoverageArea.halez",
-    "aggregationProject": "",
+    "aggregationProject": "coverage_areas/DF7_10_CoverageArea_Aggregations.halez",
+    "outputFolder": "coverage_areas/output",
     "vg250Folder": "coverage_areas/VG250"
   },
   "validations": {
@@ -77,6 +78,7 @@
       "table": {
         "path": "majorroad/validation/"
       },
+      "coverageArea": true,
       "targetFolder": "majorroad/output",
       "targetFileName": "LAP_HVS_2024_v230717_aggregated.xlsx"
     },
@@ -85,6 +87,7 @@
       "table": {
         "path": "majorair/validation/"
       },
+      "coverageArea": true,
       "targetFolder": "majorair/output",
       "targetFileName": "LAP_GFH_2024_v230717_aggregated.xlsx"
     },
@@ -93,6 +96,7 @@
       "table": {
         "path": "majorrail/validation/"
       },
+      "coverageArea": true,
       "targetFolder": "majorrail/output",
       "targetFileName": "LAP_HES_2024_v230717_aggregated.xlsx"
     },
@@ -101,6 +105,7 @@
       "table": {
         "path": "agg/validation/"
       },
+      "coverageArea": true,
       "targetFolder": "agg/output",
       "targetFileName": "LAP_AGG_2024_v230717_aggregated.xlsx"
     },
