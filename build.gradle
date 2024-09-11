@@ -83,6 +83,16 @@ task('prepare-validation-summary').doFirst {
   }
 }
 
+task('prepare-aggregation-summary').doFirst {
+  def summaryFile = file('Zusammenfassung.log')
+  summaryFile.withWriterAppend('utf8') { out ->
+    out.append('\n')
+    out.append('==================================================\n')
+    out.append("Aggregationslauf ${new Date().toString()}\n")
+    out.append('==================================================\n')
+  }
+}
+
 config.validations.each { name, settings ->
     def projectFile = new File(configBasePath, settings.project)
 
@@ -328,10 +338,13 @@ config.aggregations.each { name, settings ->
       additionalArgs << "${targetFolder}/statistics.json"
       additionalArgs << '-reportsOut'
       additionalArgs << "${targetFolder}/reports.out"
+      additionalArgs << '-successEvaluation'
+      additionalArgs << 'successEvaluation.groovy'
 
       description "Validierte Daten auf Basis des hale»studio-Projekts \"${projectFile.name}\" aggregieren."
       group 'Aggregation'
 
+      dependsOn 'prepare-aggregation-summary'
       if (settings.coverageArea) {
         dependsOn "aggregate-$name-coveragearea"
       }
