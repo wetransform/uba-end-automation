@@ -36,6 +36,8 @@ project.ext.configBasePath = project.file(project.hasProperty('configBasePath') 
 def json = new groovy.json.JsonSlurper()
 def config = json.parse(file(project.hasProperty('configFile') ? project.getProperty('configFile') : 'config.json'))
 
+def summaryFile = new File(project.ext.configBasePath, 'Zusammenfassung.log')
+
 /*
  * Transformation tasks
  */
@@ -74,7 +76,6 @@ task('clean-all') {
 }
 
 task('prepare-validation-summary').doFirst {
-  def summaryFile = file('Zusammenfassung.log')
   summaryFile.withWriterAppend('utf8') { out ->
     out.append('\n')
     out.append('==================================================\n')
@@ -84,7 +85,6 @@ task('prepare-validation-summary').doFirst {
 }
 
 task('prepare-aggregation-summary').doFirst {
-  def summaryFile = file('Zusammenfassung.log')
   summaryFile.withWriterAppend('utf8') { out ->
     out.append('\n')
     out.append('==================================================\n')
