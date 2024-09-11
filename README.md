@@ -208,6 +208,10 @@ oder von dort verschoben werden.
 Die Aggregationen können über `gradlew aggregate-nap-<lärmquelle>` auch einzeln ausgeführt werden.
 Eine Liste aller verfügbaren Aggregationen kann mit `gradlew tasks` abgerufen werden.
 
+Bei jedem Aggregationslauf wird eine Liste der durchgeführten Aggregationen in der Datei `Zusammenfassung.log`
+angehängt, die das Ergebnis für jede aggregierte Ausgabedatei zeigt. Die Datei `Zusammenfassung.log` wird in dem Ordner
+angelegt, der in der Konfigurationseinstellung `configBaseBath` angegeben ist.
+
 Die detaillierten Log-Ausgaben und Berichte werden im Ausgabeverzeichnis der Quelle
 (z. B. `<configBasePath>/majorroad/output`) abgelegt. Folgende Dateien werden erzeugt:
 

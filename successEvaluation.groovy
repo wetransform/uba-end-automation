@@ -9,6 +9,23 @@ else {
 }
 def sourceFile = new File(sourceFileUrl.toURI())
 
+def outputFileUrl = aggregated['eu.esdihumboldt.hale.io.instance.write.transformed'].report.location
+if ([Collection, Object[]].any { it.isAssignableFrom(outputFileUrl.getClass()) }) {
+    outputFileUrl = new URL(outputFileUrl[0])
+}
+else {
+    outputFileUrl = new URL(outputFileUrl)
+}
+def outputFile = new File(outputFileUrl.toURI())
+
+def reportedFile
+if (outputFileUrl.toString().contains('validation')) {
+    reportedFile = sourceFile
+}
+else {
+    reportedFile = outputFile
+}
+
 def validationType
 def targetSchema = aggregated['eu.esdihumboldt.hale.io.schema.read.target'].report.location
 if (targetSchema.toString().contains('CoverageArea')) {
@@ -19,7 +36,7 @@ else {
 }
 
 if (aggregated['eu.esdihumboldt.hale.transform'].report.errors > 0) {
-    summaryFile << "\u274c ${sourceFile.getAbsolutePath()} (${validationType}) - Validierungsfehler\n"
+    summaryFile << "\u274c ${reportedFile.getAbsolutePath()} (${validationType}) - Validierungsfehler\n"
     println ""
     println "${(char)27}[31;49m!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     println '!!! Validierung war nicht erfolgreich, bitte Fehlermeldungen im Log beachten !!!'
@@ -27,7 +44,7 @@ if (aggregated['eu.esdihumboldt.hale.transform'].report.errors > 0) {
     System.exit(-1)
 }
 else {
-    summaryFile << "\u2705 ${sourceFile.getAbsolutePath()} (${validationType}) - OK\n"
+    summaryFile << "\u2705 ${reportedFile.getAbsolutePath()} (${validationType}) - OK\n"
 }
 
 // the transformation must have been completed
