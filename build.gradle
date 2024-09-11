@@ -356,6 +356,15 @@ config.aggregations.each { name, settings ->
 
     tasks['aggregate-all'].dependsOn("aggregate-$name")
 
+    task("clean-aggregation-$name") {
+      description "Entfernt die Aggregationsergebnisse für $name"
+      group 'Aggregation'
+    }.doLast {
+      if (targetFolder.exists()) {
+        FileUtils.cleanDirectory(targetFolder)
+      }
+    }
+
     if (settings.coverageArea) {
       def coverageAreaLogFolder = new File(targetFolder, 'logs_coverage_area')
       coverageAreaLogFolder.mkdirs()
@@ -389,21 +398,17 @@ config.aggregations.each { name, settings ->
         additionalArgs << "${coverageAreaLogFolder}/statistics_coveragearea.json"
         additionalArgs << '-reportsOut'
         additionalArgs << "${coverageAreaLogFolder}/reports_coveragearea.out"
+        additionalArgs << '-successEvaluation'
+        additionalArgs << 'successEvaluation.groovy'
 
         description "Gültigkeitsbereiche auf Basis des hale»studio-Projekts \"${config.coverageArea.aggregationProject}\" aggregieren."
         group 'Aggregation'
+
+        dependsOn 'prepare-aggregation-summary'
+        dependsOn "clean-aggregation-$name"
       }
 
       tasks['aggregate-all'].dependsOn("aggregate-$name-coveragearea")
-    }
-
-    task("clean-aggregation-$name") {
-      description "Entfernt die Aggregationsergebnisse für $name"
-      group 'Aggregation'
-    }.doLast {
-      if (targetFolder.exists()) {
-        FileUtils.cleanDirectory(targetFolder)
-      }
     }
 
     tasks['clean-all-aggregations'].dependsOn("clean-aggregation-$name")
