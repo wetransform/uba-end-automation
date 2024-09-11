@@ -1,4 +1,18 @@
-def summaryFile = new File('Zusammenfassung.log')
+def summaryFile
+
+def gradlePropertiesFile = new File('gradle.properties')
+if (gradlePropertiesFile.exists()) {
+    def properties = new Properties()
+    gradlePropertiesFile.withInputStream {
+        properties.load(it)
+    }
+
+    def configBasePath = new File(properties.configBasePath)
+    summaryFile = new File(configBasePath, 'Zusammenfassung.log')
+}
+else {
+    summaryFile = new File('Zusammenfassung.log')
+}
 
 def sourceFileUrl = aggregated['eu.esdihumboldt.hale.io.instance.read.source'].report.location
 if ([Collection, Object[]].any { it.isAssignableFrom(sourceFileUrl.getClass()) }) {

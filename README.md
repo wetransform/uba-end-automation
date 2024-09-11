@@ -173,9 +173,8 @@ Die Validierungen können über `gradlew validate-nap-<lärmquelle>-<plan>` auch
 Eine Liste aller verfügbaren Validierungen kann mit `gradlew tasks` abgerufen werden.
 
 Bei jedem Validierungslauf wird eine Liste der durchgeführten Validierungen in der Datei `Zusammenfassung.log`
-angehängt, die das Ergebnis für jede validierte Eingabedatei zeigt. Die Datei `Zusammenfassung.log` wird aus technischen
-Gründen im Hauptordner der Automatisierungsskripte angelegt und nicht in dem Ordner, der in der Konfigurationseinstellung
-`configBaseBath` angegeben ist.
+angehängt, die das Ergebnis für jede validierte Eingabedatei zeigt. Die Datei `Zusammenfassung.log` wird in dem Ordner
+angelegt, der in der Konfigurationseinstellung `configBaseBath` angegeben ist.
 
 Die detaillierten Log-Ausgaben und Berichte werden im jeweiligen Ausgabeverzeichnis des validierten Plans
 (z. B. `<configBasePath>/majorroad/validation/Plan_1`) abgelegt. Folgende Dateien werden erzeugt:
