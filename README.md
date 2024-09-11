@@ -169,16 +169,18 @@ Für den Datenfluss 7_10 wird in der Standardkonfiguration folgende Ordnerstrukt
 In einem ersten Schritt müssen die Excel-Vorlagen validiert und in das von der EEA vorgegebene Format überführt werden.
 Mit dem Befehl `gradlew validate-all` können alle in der Datei `config.json` konfigurierten Validierungen ausgeführt werden.
 
-Die Validierungen können über `gradlew validate-nap-<quelle>-<plan>` auch einzeln ausgeführt werden.
+Die Validierungen können über `gradlew validate-nap-<lärmquelle>-<plan>` auch einzeln ausgeführt werden.
 Eine Liste aller verfügbaren Validierungen kann mit `gradlew tasks` abgerufen werden.
 
 Bei jedem Validierungslauf wird eine Liste der durchgeführten Validierungen in der Datei `Zusammenfassung.log`
-angehängt, die das Ergebnis für jede validierte Eingabedatei zeigt.
+angehängt, die das Ergebnis für jede validierte Eingabedatei zeigt. Die Datei `Zusammenfassung.log` wird aus technischen
+Gründen im Hauptordner der Automatisierungsskripte angelegt und nicht in dem Ordner, der in der Konfigurationseinstellung
+`configBaseBath` angegeben ist.
 
 Die detaillierten Log-Ausgaben und Berichte werden im jeweiligen Ausgabeverzeichnis des validierten Plans
 (z. B. `<configBasePath>/majorroad/validation/Plan_1`) abgelegt. Folgende Dateien werden erzeugt:
 
-- `DF7_10_NAP_<Quelle>_<Plan>.xlsx` - Ins EEA-Format überführter Plan
+- `DF7_10_NAP_<Lärmquelle>_<Plan>.xlsx` - Ins EEA-Format überführter Plan
 - `LAP_Gebiet_<Plan>.gpkg` - Abgeleiteter Gültigkeitsbereich
 - `out.log` - Standardausgabe (stdout)
 - `err.log` - Standardfehlerausgabe (stderr)
@@ -203,14 +205,14 @@ Aggregation wird ebenfalls Validierungsfehler aufweisen. Um Pläne mit Validieru
 muss das entsprechende Planverzeichnis aus dem Validierungsordner (z. B. `<configBasePath>/majorroad/validation`) entfernt
 oder von dort verschoben werden.
 
-Die Aggregationen können über `gradlew aggregate-nap-<quelle>` auch einzeln ausgeführt werden.
+Die Aggregationen können über `gradlew aggregate-nap-<lärmquelle>` auch einzeln ausgeführt werden.
 Eine Liste aller verfügbaren Aggregationen kann mit `gradlew tasks` abgerufen werden.
 
 Die detaillierten Log-Ausgaben und Berichte werden im Ausgabeverzeichnis der Quelle
 (z. B. `<configBasePath>/majorroad/output`) abgelegt. Folgende Dateien werden erzeugt:
 
 - `<Vorlagenname>_aggregated.xlsx` - Aggregierte Daten
-- `LAP_Gebiet_nap-<Quelle>_aggregated.gpkg` - Aggregierte Gültigkeitsbereiche
+- `LAP_Gebiet_nap-<Lärmquelle>_aggregated.gpkg` - Aggregierte Gültigkeitsbereiche
 - `out.log` - Standardausgabe (stdout)
 - `err.log` - Standardfehlerausgabe (stderr)
 - `reports.out` - hale-Berichtsdatei
