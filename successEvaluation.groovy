@@ -9,8 +9,17 @@ else {
 }
 def sourceFile = new File(sourceFileUrl.toURI())
 
+def validationType
+def targetSchema = aggregated['eu.esdihumboldt.hale.io.schema.read.target'].report.location
+if (targetSchema.toString().contains('CoverageArea')) {
+    validationType = 'Gültigkeitsbereich'
+}
+else {
+    validationType = 'Lärmaktionsplan'
+}
+
 if (aggregated['eu.esdihumboldt.hale.transform'].report.errors > 0) {
-    summaryFile << "\u274c ${sourceFile.getAbsolutePath()} - Validierungsfehler\n"
+    summaryFile << "\u274c ${sourceFile.getAbsolutePath()} (${validationType}) - Validierungsfehler\n"
     println ""
     println "${(char)27}[31;49m!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     println '!!! Validierung war nicht erfolgreich, bitte Fehlermeldungen im Log beachten !!!'
@@ -18,7 +27,7 @@ if (aggregated['eu.esdihumboldt.hale.transform'].report.errors > 0) {
     System.exit(-1)
 }
 else {
-    summaryFile << "\u2705 ${sourceFile.getAbsolutePath()} - OK\n"
+    summaryFile << "\u2705 ${sourceFile.getAbsolutePath()} (${validationType}) - OK\n"
 }
 
 // the transformation must have been completed
