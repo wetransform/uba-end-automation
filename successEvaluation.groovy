@@ -45,6 +45,9 @@ def targetSchema = aggregated['eu.esdihumboldt.hale.io.schema.read.target'].repo
 if (targetSchema.toString().contains('CoverageArea')) {
     validationType = 'Gültigkeitsbereich'
 }
+else if (targetSchema.toString().contains('QuietAreas')) {
+    validationType = 'Ruhige Gebiete'
+}
 else {
     validationType = 'Lärmaktionsplan'
 }
