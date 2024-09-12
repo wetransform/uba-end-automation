@@ -169,8 +169,9 @@ Für den Datenfluss 7_10 wird in der Standardkonfiguration folgende Ordnerstrukt
 In einem ersten Schritt müssen die Excel-Vorlagen validiert und in das von der EEA vorgegebene Format überführt werden.
 Mit dem Befehl `gradlew validate-all` können alle in der Datei `config.json` konfigurierten Validierungen ausgeführt werden.
 
-Die Validierungen können über `gradlew validate-nap-<lärmquelle>-<plan>` auch einzeln ausgeführt werden.
-Eine Liste aller verfügbaren Validierungen kann mit `gradlew tasks` abgerufen werden.
+Die Validierungen für die Pläne und Gültigkeitsbereiche können mit `gradlew validate-nap-<lärmquelle>-<planname>-plan` bzw.
+`gradlew validate-nap-<lärmquelle>-<planname>-coveragearea` auch einzeln ausgeführt werden. Eine Liste aller verfügbaren
+Validierungen kann mit `gradlew tasks` abgerufen werden.
 
 Bei jedem Validierungslauf wird eine Liste der durchgeführten Validierungen in der Datei `Zusammenfassung.log`
 angehängt, die das Ergebnis für jede validierte Eingabedatei zeigt. Die Datei `Zusammenfassung.log` wird in dem Ordner
@@ -179,8 +180,8 @@ angelegt, der in der Konfigurationseinstellung `configBaseBath` angegeben ist.
 Die detaillierten Log-Ausgaben und Berichte werden im jeweiligen Ausgabeverzeichnis des validierten Plans
 (z. B. `<configBasePath>/majorroad/validation/Plan_1`) abgelegt. Folgende Dateien werden erzeugt:
 
-- `DF7_10_NAP_<Lärmquelle>_<Plan>.xlsx` - Ins EEA-Format überführter Plan
-- `LAP_Gebiet_<Plan>.gpkg` - Abgeleiteter Gültigkeitsbereich
+- `DF7_10_NAP_<Lärmquelle>_<Planname>.xlsx` - Ins EEA-Format überführter Plan
+- `LAP_Gebiet_<Planname>.gpkg` - Abgeleiteter Gültigkeitsbereich
 - `out.log` - Standardausgabe (stdout)
 - `err.log` - Standardfehlerausgabe (stderr)
 - `reports.out` - hale-Berichtsdatei
@@ -204,8 +205,9 @@ Aggregation wird ebenfalls Validierungsfehler aufweisen. Um Pläne mit Validieru
 muss das entsprechende Planverzeichnis aus dem Validierungsordner (z. B. `<configBasePath>/majorroad/validation`) entfernt
 oder von dort verschoben werden.
 
-Die Aggregationen können über `gradlew aggregate-nap-<lärmquelle>` auch einzeln ausgeführt werden.
-Eine Liste aller verfügbaren Aggregationen kann mit `gradlew tasks` abgerufen werden.
+Die Aggregationen für die Pläne und Gültigkeitsbereiche können mit `gradlew aggregate-nap-<lärmquelle>-plan` bzw.
+`gradlew aggregate-nap-<lärmquelle>-coveragearea` auch einzeln ausgeführt werden. Eine Liste aller verfügbaren
+Aggregationen kann mit `gradlew tasks` abgerufen werden.
 
 Bei jedem Aggregationslauf wird eine Liste der durchgeführten Aggregationen in der Datei `Zusammenfassung.log`
 angehängt, die das Ergebnis für jede aggregierte Ausgabedatei zeigt. Die Datei `Zusammenfassung.log` wird in dem Ordner

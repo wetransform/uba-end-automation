@@ -113,7 +113,12 @@ config.validations.each { name, settings ->
         File logFileFolder = new File(targetFolder, d.name)
         logFileFolder.mkdirs()
 
-        task("validate-$name-${d.name}", type: hale.transform()) {
+        task("validate-$name-${d.name}") {
+          description "Führt alle Validierungen für ${d.name} durch"
+          group 'Validierung'
+        }
+
+        task("validate-$name-${d.name}-plan", type: hale.transform()) {
           assert projectFile != null
           transformation = projectFile
 
@@ -178,18 +183,15 @@ config.validations.each { name, settings ->
           group 'Validierung'
 
           dependsOn 'prepare-validation-summary'
-          if (settings.coverageArea) {
-            dependsOn "validate-$name-${d.name}-coveragearea"
-          }
-          finalizedBy "finalize-$name-${d.name}"
+          finalizedBy "finalize-$name-${d.name}-plan"
         }
 
-        tasks["validate-$name-${d.name}"].doFirst {
+        tasks["validate-$name-${d.name}-plan"].doFirst {
           targetFolder.mkdirs()
           logFileFolder.mkdirs()
         }
 
-        task("finalize-$name-${d.name}").doLast {
+        task("finalize-$name-${d.name}-plan").doLast {
           def outputFile = new File(logFileFolder, 'LAP_HVS_2024_v230717_validation.xlsx')
           def renamedFile = new File(logFileFolder, "DF7_10_NAP_MajorRoads_${d.name}.xlsx")
           outputFile.renameTo(renamedFile)
@@ -205,8 +207,9 @@ config.validations.each { name, settings ->
 
         tasks['clean-all'].dependsOn("clean-validation-$name-${d.name}")
 
-        tasks['validate-all'].dependsOn("validate-$name-${d.name}")
-        tasks["validate-$name-all"].dependsOn("validate-$name-${d.name}")
+        tasks["validate-$name-${d.name}"].dependsOn("validate-$name-${d.name}-plan")
+        tasks['validate-all'].dependsOn("validate-$name-${d.name}-plan")
+        tasks["validate-$name-all"].dependsOn("validate-$name-${d.name}-plan")
 
         if (settings.coverageArea) {
           def coverageAreaLogFolder = new File(logFileFolder, 'logs_coverage_area')
@@ -287,6 +290,10 @@ config.validations.each { name, settings ->
             def renamedFile = new File(logFileFolder, "LAP_Gebiet_${d.name}.gpkg")
             outputFile.renameTo(renamedFile)
           }
+
+          tasks["validate-$name-${d.name}"].dependsOn("validate-$name-${d.name}-coveragearea")
+          tasks['validate-all'].dependsOn("validate-$name-${d.name}-coveragearea")
+          tasks["validate-$name-all"].dependsOn("validate-$name-${d.name}-coveragearea")
         }
       }
     }
@@ -300,7 +307,12 @@ config.aggregations.each { name, settings ->
 
     def inputFolder = new File(configBasePath, settings.table.path)
 
-    task("aggregate-$name", type: hale.transform()) {
+    task("aggregate-$name") {
+      description "Validierte Daten und Gültigkeitsbereiche für $name aggregieren."
+      group 'Aggregation'
+    }
+
+    task("aggregate-$name-plan", type: hale.transform()) {
       assert projectFile != null
       transformation = projectFile
 
@@ -345,15 +357,13 @@ config.aggregations.each { name, settings ->
       group 'Aggregation'
 
       dependsOn 'prepare-aggregation-summary'
-      if (settings.coverageArea) {
-        dependsOn "aggregate-$name-coveragearea"
-      }
     }
 
-    tasks["aggregate-$name"].doFirst {
+    tasks["aggregate-$name-plan"].doFirst {
       targetFolder.mkdirs()
     }
 
+    tasks["aggregate-$name"].dependsOn("aggregate-$name-plan")
     tasks['aggregate-all'].dependsOn("aggregate-$name")
 
     task("clean-aggregation-$name") {
@@ -408,7 +418,7 @@ config.aggregations.each { name, settings ->
         dependsOn "clean-aggregation-$name"
       }
 
-      tasks['aggregate-all'].dependsOn("aggregate-$name-coveragearea")
+      tasks["aggregate-$name"].dependsOn("aggregate-$name-coveragearea")
     }
 
     tasks['clean-all-aggregations'].dependsOn("clean-aggregation-$name")
