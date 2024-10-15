@@ -148,6 +148,13 @@ Für den Datenfluss 7_10 wird in der Standardkonfiguration folgende Ordnerstrukt
     |  │  ├─ <Plan_2>/
     |  │  ├─ ...
     |  │  ├─ <Plan_n>/
+    │  ├─ input_agglomerations/   <== für die Ableitung ruhiger Gebiete bei Ballungsräumen
+    |  │  ├─ <Plan_1>/
+    |  |  |  ├─ <Plandatei_UBA>.xlsx
+    |  |  |  ├─ LAP_Ruhige_Gebiete_Lage.shp (+ zugehörige Dateien)
+    |  │  ├─ <Plan_2>/
+    |  │  ├─ ...
+    |  │  ├─ <Plan_n>/
     │  ├─ output/
     │  ├─ validation/
     ├─ coverage_areas/
@@ -189,7 +196,18 @@ Gültigkeitsbereiche abgelegt:
 - `reports_coveragearea.out` - hale-Berichtsdatei zur Ableitung des Gültigkeitsbereichs
 - `statistics_coveragearea.json` - Statistikdatei im JSON-Format zur Ableitung des Gültigkeitsbereichs
 
-## Aggregation
+#### Ruhige Gebiete
+
+Bei der Validierung ruhiger Gebiete muss ein Sonderfall beachtet werden. Im Fall von Lärmaktionsplänen für Ballungsräume
+müssen die Eingabedateien abweichend in Verzeichnissen unterhalb von `quiet_areas/input_agglomerations` abgelegt werden.
+Für alle anderen Planarten müssen die Dateien in Verzeichnissen unterhalb von `quiet_areas/input` abgelegt werden.
+
+Die zugehörigen Validierungstasks heißen:
+
+- `validate-nap-quietareas-agglomerations-all` bzw. `validate-nap-quietareas-agglomerations-<planname>` für Ballungsräume
+- `validate-nap-quietareas-all` bzw. `validate-nap-quietareas-<planname>` für alle anderen Plantypen
+
+### Aggregation
 
 Alle ins EEA-Format überführten Excel-Vorlagen können dann in einem zweiten Schritt aggregiert werden. Mit dem Befehl
 `gradlew aggregate-all` können alle in der Datei `config.json` konfigurierten Aggregationen ausgeführt werden.
