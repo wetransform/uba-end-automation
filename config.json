@@ -70,6 +70,33 @@
       ],
       "targetFolder": "quiet_areas/validation",
       "targetFileName": "LAP_Ruhige_Gebiete_Lage_validation.gpkg"
+    },
+    "nap-quietareas-agglomerations": {
+      "project": "quiet_areas/UBA-DE_RuhigeGebieteLage_to_DF7_10_QuietAreas.halez",
+      "table": {
+        "path": "quiet_areas/input_agglomerations"
+      },
+      "sheets": [
+        {
+          "index": 0,
+          "typename": "Allgemeines",
+          "skip": 0
+        },
+        {
+          "index": 8,
+          "typename": "Ruhige_Gebiete",
+          "skip": 4
+        }
+      ],
+      "additionalSources": [
+        {
+          "includePattern": "*.shp",
+          "provider": "eu.esdihumboldt.hale.io.shape.reader.instance",
+          "contentType": "eu.esdihumboldt.hale.io.shp"
+        }
+      ],
+      "targetFolder": "quiet_areas/validation",
+      "targetFileName": "LAP_Ruhige_Gebiete_Lage_validation.gpkg"
     }
   },
   "aggregations": {
