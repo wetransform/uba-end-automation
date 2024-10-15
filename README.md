@@ -132,6 +132,7 @@ Für den Datenfluss 7_10 wird in der Standardkonfiguration folgende Ordnerstrukt
     │  ├─ input/
     |  │  ├─ <Plan_1>/
     |  |  |  ├─ <Plandatei_UBA>.xlsx
+    |  |  |  ├─ LAP_Gebiet.shp (+ zugehörige Dateien, optional)
     |  │  ├─ <Plan_2>/
     |  │  ├─ ...
     |  │  ├─ <Plan_n>/
@@ -152,13 +153,6 @@ Für den Datenfluss 7_10 wird in der Standardkonfiguration folgende Ordnerstrukt
     ├─ coverage_areas/
     │  ├─ UBA-DE_Gebiet_to_DF7_10_CoverageArea.halez
     │  ├─ DF7_10_CoverageArea_Aggregations.halez
-    │  ├─ input/
-    |  │  ├─ <Plan_1>/
-    |  |  |  ├─ <Plandatei_UBA>.xlsx
-    |  |  |  ├─ LAP_Gebiet.shp (+ zugehörige Dateien)
-    |  │  ├─ <Plan_2>/
-    |  │  ├─ ...
-    |  │  ├─ <Plan_n>/
     │  ├─ VG250/
     |  │  ├─ VG250_GEM.shp (+ zugehörige Dateien)
     |  │  ├─ VG250_RBZ.shp (+ zugehörige Dateien)
