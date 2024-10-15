@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/wetransform/uba-end-automation/compare/v2.1.0...v2.1.1) (2024-10-15)
+
+
+### Bug Fixes
+
+* **df7_10:** add separate task for Agglomerations Quiet Areas ([2a40096](https://github.com/wetransform/uba-end-automation/commit/2a400966ef284553070bb6e1cb2a6ec759dde96f)), closes [SVC-1812](https://wetransform.atlassian.net/browse/SVC-1812)
+
 ## [2.1.0](https://github.com/wetransform/uba-end-automation/compare/v2.0.1...v2.1.0) (2024-09-13)
 
 
