@@ -524,5 +524,5 @@ distributions {
  * Gradle wrapper
  */
 wrapper {
-  gradleVersion = 'v4.2.2'
+  gradleVersion = '9.3.1'
 }
